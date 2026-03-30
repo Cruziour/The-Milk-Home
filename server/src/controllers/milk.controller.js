@@ -39,20 +39,22 @@ const addMilkEntry = asyncHandler(async (req, res) => {
       'Invalid input: Morning and Evening quantities and amounts must be valid numbers'
     );
   }
+  const inputDate = new Date(date);
+  const entryDate = new Date(
+    Date.UTC(inputDate.getFullYear(), inputDate.getMonth(), inputDate.getDate(), 12, 0, 0)
+  );
   try {
     const user = await User.findOne({ slNo: parsedSlNo, isActive: true });
     if (!user) {
       throw new ApiError(404, 'User not found with the provided SL No');
     }
-    const entryDate = new Date(date);
-    entryDate.setHours(0, 0, 0, 0);
     const existingEntry = await MilkEntry.findOne({ vendor: user._id, date: entryDate });
     if (existingEntry) {
       throw new ApiError(409, 'Milk entry already exists for this user on the specified date');
     }
     const milkEntry = new MilkEntry({
       vendor: user._id,
-      date: new Date(date),
+      date: entryDate,
       morning: {
         qty: parsedFloatMorningQty,
         amount: parsedFloatMorningAmount,
@@ -118,6 +120,7 @@ const getMilkEntries = asyncHandler(async (req, res) => {
             slNo: '$vendorDetails.slNo',
             name: '$vendorDetails.name',
             role: '$vendorDetails.role',
+            milkType: '$vendorDetails.milkType',
           },
         },
       },
@@ -189,6 +192,7 @@ const getMilkEntriesBySlNo = asyncHandler(async (req, res) => {
             slNo: '$vendorDetails.slNo',
             name: '$vendorDetails.name',
             role: '$vendorDetails.role',
+            milkType: '$vendorDetails.milkType',
           },
         },
       },
@@ -211,7 +215,7 @@ const getMilkEntriesBySlNo = asyncHandler(async (req, res) => {
       .json(
         new ApiResponse(
           200,
-          { entries, totalSummary, user },
+          { entries, totalSummary },
           `Farmer's monthly ledger fetched successfully.`
         )
       );
@@ -325,7 +329,6 @@ const exportMilkEntries = asyncHandler(async (req, res) => {
       title.alignment = { vertical: 'middle', horizontal: 'center' };
 
       worksheet.mergeCells('A2', 'J2');
-      // worksheet.getCell('A2').value = `Report: ${month}/${year} | ${user ? user.name : 'All Farmers'}`;
       worksheet.getCell('A2').value = user
         ? `Farmer: ${user.name} (${user.slNo}) | Type: ${user.milkType || 'N/A'}`
         : 'All Farmers';
@@ -337,10 +340,10 @@ const exportMilkEntries = asyncHandler(async (req, res) => {
         { header: 'SL', key: 'slNo', width: 8 },
         { header: 'Name', key: 'name', width: 20 },
         { header: 'Type', key: 'type', width: 10 },
-        { header: 'M.Qty', key: 'mQty', width: 10 },
-        { header: 'M.Amt', key: 'mAmt', width: 12 },
-        { header: 'E.Qty', key: 'eQty', width: 10 },
-        { header: 'E.Amt', key: 'eAmt', width: 12 },
+        { header: 'Morning.Qty', key: 'mQty', width: 18 },
+        { header: 'Morning.Amt', key: 'mAmt', width: 18 },
+        { header: 'Evening.Qty', key: 'eQty', width: 18 },
+        { header: 'Evening.Amt', key: 'eAmt', width: 18 },
         { header: 'Total Ltr', key: 'tLtr', width: 12 },
         { header: 'Total Rs', key: 'tRs', width: 15 },
       ];
@@ -414,7 +417,7 @@ const exportMilkEntries = asyncHandler(async (req, res) => {
       doc
         .fillColor('#2C3E50')
         .fontSize(10)
-        .text('Village: Rampur, Dist: Patna (Bihar)', { align: 'center' });
+        .text('Village: Arniya, Dist: Vaishali (Bihar)', { align: 'center' });
       doc
         .fontSize(12)
         .moveDown(0.5)
@@ -468,7 +471,7 @@ const exportMilkEntries = asyncHandler(async (req, res) => {
       doc.text(`Generated on: ${new Date().toLocaleString()}`, { align: 'left' });
       doc.end();
     } else {
-      throw new ApiError(400, 'Invalid format: Supported formats are csv, excel, and pdf');
+      throw new ApiError(400, 'Invalid format: Supported formats are excel, and pdf');
     }
   } catch (error) {
     throw new ApiError(500, error.message || 'Error occurred while exporting milk entries');

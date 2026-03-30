@@ -15,6 +15,6 @@ router.route('/login').post(loginUser);
 // Secure routes
 router.route('/').post(isAdmin, registerVendor);
 router.route('/update').post(isAdmin, updateUserStatus);
-router.route('/getAllUsers').get(isAdmin, getAllUsers);
+router.route('/get-all-users').get(isAdmin, getAllUsers);
 
 export default router;
