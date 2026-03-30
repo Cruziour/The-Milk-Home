@@ -136,4 +136,16 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 });
 
-export { registerVendor, updateUserStatus, loginUser };
+// get all users
+const getAllUsers = asyncHandler(async (req, res) => {
+  try {
+    const users = await User.find().select('-password').sort({ createdAt: -1 });
+    return res
+      .status(200)
+      .json(new ApiResponse(200, users, 'Success: All users retrieved successfully'));
+  } catch (error) {
+    throw new ApiError(500, error.message || 'An unexpected error occurred while fetching users.');
+  }
+});
+
+export { registerVendor, updateUserStatus, loginUser, getAllUsers };

@@ -40,10 +40,9 @@ const milkEntrySchema = new mongoose.Schema({
   },
 });
 
-milkEntrySchema.pre('save', function (next) {
+milkEntrySchema.pre('save', function () {
   this.dayTotalAmount = (this.morning.amount || 0) + (this.evening.amount || 0);
   this.dayTotalMilk = (this.morning.qty || 0) + (this.evening.qty || 0);
-  next();
 });
 
 export const MilkEntry = mongoose.model('MilkEntry', milkEntrySchema);
