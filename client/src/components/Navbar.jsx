@@ -1,27 +1,104 @@
-import { useDispatch, useSelector } from "react-redux";
-import { toggleTheme } from "../app/features/themeSlice";
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
-  const dispatch = useDispatch();
-  const mode = useSelector(state => state.theme.mode);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const menuItems = [
+    { name: "Home", to: "/home" },
+    { name: "About", to: "/about" },
+    { name: "Contact", to: "/contact" },
+    { name: "Manage Milk", to: "/managemilk" },
+    { name: "Add Vendor", to: "/addvendor" },
+    { name: "Update Vendor", to: "/updatevendor" },
+    { name: "Report", to: "/reports" },
+    { name: "Config", to: "/config" },
+  ];
 
   return (
-    <nav className="flex items-center justify-between px-6 py-4 bg-blue-500 dark:bg-gray-800 text-white shadow-md">
-      <h1 className="text-lg font-semibold">Milk Admin</h1>
+    <nav className="bg-indigo-600 border-b border-indigo-700 px-4 md:px-8 py-3 sticky top-0 z-50 shadow-md text-white">
+      <div className="flex items-center justify-between">
+        {/* Mobile Menu Button */}
+        <div className="md:hidden flex items-center">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="text-white hover:text-cyan-300 focus:outline-none transition-transform active:scale-90"
+          >
+            <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {isOpen ? (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h16m-7 6h7"
+                />
+              )}
+            </svg>
+          </button>
+        </div>
 
-      <ul className="flex gap-6 text-sm">
-        <li className="cursor-pointer hover:underline">Home</li>
-        <li className="cursor-pointer hover:underline">Manage Milk</li>
-        <li className="cursor-pointer hover:underline">Reports</li>
-        <li className="cursor-pointer hover:underline">Config</li>
-      </ul>
+        {/* Desktop Menu - NavLink ka use */}
+        <div className="hidden md:flex items-center gap-8">
+          {menuItems.map(item => (
+            <NavLink
+              key={item.name}
+              to={item.to}
+              // NavLink humein isActive property deta hai automatically styling ke liye
+              className={({ isActive }) =>
+                `font-bold text-[13px] uppercase tracking-wider transition-all duration-200 pb-1 border-b-2 ${
+                  isActive
+                    ? "border-cyan-400 text-cyan-300"
+                    : "border-transparent text-white hover:text-cyan-200 hover:border-cyan-200"
+                }`
+              }
+            >
+              {item.name}
+            </NavLink>
+          ))}
+        </div>
 
-      <button
-        onClick={() => dispatch(toggleTheme())}
-        className="bg-white text-black dark:bg-gray-700 dark:text-white px-3 py-1 rounded-md text-sm"
-      >
-        {mode === "light" ? "🌙 Dark" : "☀️ Light"}
-      </button>
+        {/* User Actions */}
+        <div className="flex items-center gap-4">
+          <div className="hidden sm:block text-right border-r border-indigo-400 pr-4">
+            <span className="text-indigo-200 text-[10px] block leading-none uppercase tracking-widest">
+              Admin Panel
+            </span>
+            <span className="font-bold text-sm">Hi, admin</span>
+          </div>
+          <button className="bg-white text-indigo-700 px-4 py-1.5 rounded text-xs font-black hover:bg-red-50 hover:text-red-600 transition-all shadow-sm">
+            LOGOUT
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu Dropdown */}
+      {isOpen && (
+        <div className="md:hidden mt-4 pb-4 bg-white rounded-lg shadow-2xl absolute left-4 right-4 p-2 border border-gray-200">
+          {menuItems.map(item => (
+            <NavLink
+              key={item.name}
+              to={item.to}
+              onClick={() => setIsOpen(false)}
+              className={({ isActive }) =>
+                `block py-3 px-4 rounded-md font-bold text-sm mb-1 transition-colors ${
+                  isActive
+                    ? "bg-indigo-600 text-white"
+                    : "text-gray-800 hover:bg-indigo-50 hover:text-indigo-600"
+                }`
+              }
+            >
+              {item.name}
+            </NavLink>
+          ))}
+        </div>
+      )}
     </nav>
   );
 };

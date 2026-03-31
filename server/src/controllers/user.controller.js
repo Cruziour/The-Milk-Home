@@ -3,8 +3,8 @@ import { ApiError, ApiResponse, asyncHandler } from '../utils/index.js';
 
 // register user
 const registerVendor = asyncHandler(async (req, res) => {
-  const { name, slNo, password, phone, milkType } = req.body;
-  if (!name || !slNo || !password || !phone || !milkType) {
+  const { name, slNo, password, phone, milkType, address } = req.body;
+  if (!name || !slNo || !password || !phone || !milkType || !address) {
     throw new ApiError(400, 'All fields are required');
   }
   const parsedSlNo = parseInt(slNo);
@@ -35,6 +35,7 @@ const registerVendor = asyncHandler(async (req, res) => {
       phone,
       milkType,
       isActive: true,
+      address,
     });
     res
       .status(201)
@@ -102,7 +103,7 @@ const updateUserStatus = asyncHandler(async (req, res) => {
 
 // login user
 const loginUser = asyncHandler(async (req, res) => {
-  const { slNo, password } = req.body;
+  const { slNo, password,  } = req.body;
   if (!slNo || !password) {
     throw new ApiError(400, 'Please fill all details.');
   }

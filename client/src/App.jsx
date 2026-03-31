@@ -7,8 +7,18 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import Login from "./pages/Login";
 import Layout from "./components/Layout";
+import {
+  Home,
+  About,
+  Config,
+  Contact,
+  ManageMilk,
+  AddVendor,
+  VendorUpdate,
+  Reports,
+  Login,
+} from "./pages/index.js";
 
 const App = () => {
   const mode = useSelector(state => state.theme.mode);
@@ -24,6 +34,14 @@ const App = () => {
     createRoutesFromChildren(
       <Route path="/" element={<Layout />}>
         <Route index element={<Login />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/managemilk" element={<ManageMilk />} />
+        <Route path="/addvendor" element={<AddVendor />} />
+        <Route path="/updatevendor" element={<VendorUpdate />} />
+        <Route path="/reports" element={<Reports />} />
+        <Route path="/config" element={<Config />} />
       </Route>
     )
   );

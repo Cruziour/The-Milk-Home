@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import MilkLogo from "../components/shared/milkLogo";
 import { loginUserService } from "../service/index.js";
+import { setAuth } from "../app/features/authSlice.js";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [slNo, setslNo] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -30,19 +33,11 @@ const Login = () => {
 
     setLoading(true);
 
-    // const deviceInfo = navigator.userAgent;
-
     try {
       const response = await loginUserService({ slNo, password });
-      console.log(response);
-
-      // Role-based redirection
-      if (response.role === "admin") {
-        navigate("/admin/dashboard");
-      } else if (response.role === "farmer") {
-        navigate("/farmer/dashboard");
-      } else {
-        navigate("/dashboard");
+      if (response.statusCode === 200) {
+        dispatch(setAuth(response.data));
+        navigate("/home");
       }
     } catch (err) {
       const msg =

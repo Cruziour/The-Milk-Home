@@ -40,6 +40,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    address: {
+      type: String,
+      required: [true, 'Address is required'],
+    },
   },
   { timestamps: true }
 );

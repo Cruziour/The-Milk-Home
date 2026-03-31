@@ -1,0 +1,9 @@
+export { default as About } from "./About";
+export { default as Contact } from "./Contact";
+export { default as Home } from "./Home";
+export { default as Login } from "./Login";
+export { default as ManageMilk } from "./ManageMilk";
+export { default as AddVendor } from "./AddVendor";
+export { default as VendorUpdate } from "./VendorUpdate";
+export { default as Reports } from "./Report";
+export { default as Config } from "./Config";
