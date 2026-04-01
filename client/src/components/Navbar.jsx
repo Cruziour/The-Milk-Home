@@ -1,13 +1,23 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { clearUser } from "../app/features/authSlice";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const menuItems = [
+  const user = useSelector(state => state.auth.user);
+  const role = user?.role;
+
+  const commonItems = [
     { name: "Home", to: "/home" },
     { name: "About", to: "/about" },
     { name: "Contact", to: "/contact" },
+  ];
+
+  const adminItems = [
     { name: "Manage Milk", to: "/managemilk" },
     { name: "Add Vendor", to: "/addvendor" },
     { name: "Update Vendor", to: "/updatevendor" },
@@ -15,10 +25,19 @@ const Navbar = () => {
     { name: "Config", to: "/config" },
   ];
 
+  const vendorItems = [{ name: "My Records", to: "/myrecords" }];
+
+  const menuItems =
+    role === "admin" ? [...commonItems, ...adminItems] : [...commonItems, ...vendorItems];
+
+  const logoutHandler = () => {
+    dispatch(clearUser());
+    navigate("/");
+  };
+
   return (
-    <nav className="bg-indigo-600 border-b border-indigo-700 px-4 md:px-8 py-3 sticky top-0 z-50 shadow-md text-white">
+    <nav className="bg-indigo-600 border-b border-indigo-700 px-4 md:px-8 py-4 sticky top-0 z-50 shadow-md text-white">
       <div className="flex items-center justify-between">
-        {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center">
           <button
             onClick={() => setIsOpen(!isOpen)}
@@ -44,13 +63,11 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Desktop Menu - NavLink ka use */}
         <div className="hidden md:flex items-center gap-8">
           {menuItems.map(item => (
             <NavLink
               key={item.name}
               to={item.to}
-              // NavLink humein isActive property deta hai automatically styling ke liye
               className={({ isActive }) =>
                 `font-bold text-[13px] uppercase tracking-wider transition-all duration-200 pb-1 border-b-2 ${
                   isActive
@@ -64,23 +81,26 @@ const Navbar = () => {
           ))}
         </div>
 
-        {/* User Actions */}
         <div className="flex items-center gap-4">
           <div className="hidden sm:block text-right border-r border-indigo-400 pr-4">
             <span className="text-indigo-200 text-[10px] block leading-none uppercase tracking-widest">
-              Admin Panel
+              {role === "admin" ? "Admin Panel" : "Vendor Portal"}
             </span>
-            <span className="font-bold text-sm">Hi, admin</span>
+            <span className="font-bold text-sm truncate max-w-25 block">
+              Hi, {user?.name || "User"}
+            </span>
           </div>
-          <button className="bg-white text-indigo-700 px-4 py-1.5 rounded text-xs font-black hover:bg-red-50 hover:text-red-600 transition-all shadow-sm">
-            LOGOUT
+          <button
+            onClick={logoutHandler}
+            className="bg-white text-indigo-700 px-4 py-1.5 rounded text-[10px] font-black hover:bg-red-50 hover:text-red-600 transition-all shadow-sm uppercase tracking-tighter"
+          >
+            Logout
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown */}
       {isOpen && (
-        <div className="md:hidden mt-4 pb-4 bg-white rounded-lg shadow-2xl absolute left-4 right-4 p-2 border border-gray-200">
+        <div className="md:hidden mt-4 pb-4 bg-white rounded-lg shadow-2xl absolute left-4 right-4 p-2 border border-gray-200 animate-in slide-in-from-top-2 duration-200">
           {menuItems.map(item => (
             <NavLink
               key={item.name}

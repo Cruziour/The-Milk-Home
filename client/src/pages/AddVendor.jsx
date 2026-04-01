@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Eye, EyeOff, AlertCircle } from "lucide-react";
+import { addVendorService } from "../service/index.js";
 
 const AddVendor = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,7 +13,7 @@ const AddVendor = () => {
     mobile: "",
     password: "",
     address: "",
-    milkType: "Cow",
+    milkType: "cow",
   });
 
   const handleChange = e => {
@@ -26,10 +27,10 @@ const AddVendor = () => {
     setError("");
 
     try {
-      // Yahan aapki actual API call hogi
-      // const response = await axios.post('/api/vendors', formData);
-
-      alert("Vendor registered successfully!");
+      const response = await addVendorService(formData);
+      if (response.success) {
+        alert("Vendor registered successfully!");
+      }
       setFormData({ slNo: "", name: "", mobile: "", password: "", address: "", milkType: "Cow" });
     } catch (err) {
       setError(err.response?.data?.message || err.message || "Something went wrong!");
@@ -81,8 +82,8 @@ const AddVendor = () => {
                 onChange={handleChange}
                 className="p-3 border border-gray-300 rounded-lg outline-none focus:ring-2 ring-indigo-500 transition-all font-bold bg-white"
               >
-                <option value="Cow">Cow (Gai)</option>
-                <option value="Buffalo">Buffalo (Bhains)</option>
+                <option value="cow">Cow (Gai)</option>
+                <option value="buffalo">Buffalo (Bhains)</option>
               </select>
             </div>
           </div>
@@ -171,7 +172,7 @@ const AddVendor = () => {
                   mobile: "",
                   password: "",
                   address: "",
-                  milkType: "Cow",
+                  milkType: "cow",
                 });
               }}
               className="px-6 py-3 border border-gray-300 text-gray-500 font-bold rounded-lg hover:bg-gray-100 transition-all uppercase text-xs"

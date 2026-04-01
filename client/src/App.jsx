@@ -18,6 +18,7 @@ import {
   VendorUpdate,
   Reports,
   Login,
+  MyRecords,
 } from "./pages/index.js";
 
 const App = () => {
@@ -42,6 +43,7 @@ const App = () => {
         <Route path="/updatevendor" element={<VendorUpdate />} />
         <Route path="/reports" element={<Reports />} />
         <Route path="/config" element={<Config />} />
+        <Route path="/myrecords" element={<MyRecords />} />
       </Route>
     )
   );

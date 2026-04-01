@@ -7,3 +7,4 @@ export { default as AddVendor } from "./AddVendor";
 export { default as VendorUpdate } from "./VendorUpdate";
 export { default as Reports } from "./Report";
 export { default as Config } from "./Config";
+export { default as MyRecords } from "./MyRecords";

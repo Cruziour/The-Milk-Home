@@ -5,6 +5,7 @@ import {
   registerVendor,
   updateUserStatus,
   getAllUsers,
+  getUserBySlNoAndName,
 } from '../controllers/user.controller.js';
 
 const router = Router();
@@ -14,7 +15,8 @@ router.route('/login').post(loginUser);
 
 // Secure routes
 router.route('/').post(isAdmin, registerVendor);
-router.route('/update').post(isAdmin, updateUserStatus);
+router.route('/update/:id').put(isAdmin, updateUserStatus);
 router.route('/get-all-users').get(isAdmin, getAllUsers);
+router.route('/get-user/:slNo').get(isAdmin, getUserBySlNoAndName);
 
 export default router;

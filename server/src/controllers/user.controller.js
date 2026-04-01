@@ -3,8 +3,10 @@ import { ApiError, ApiResponse, asyncHandler } from '../utils/index.js';
 
 // register user
 const registerVendor = asyncHandler(async (req, res) => {
-  const { name, slNo, password, phone, milkType, address } = req.body;
-  if (!name || !slNo || !password || !phone || !milkType || !address) {
+  console.log(req.body);
+
+  const { slNo, name, mobile, password, address, milkType } = req.body;
+  if (!name || !slNo || !password || !mobile || !milkType || !address) {
     throw new ApiError(400, 'All fields are required');
   }
   const parsedSlNo = parseInt(slNo);
@@ -32,7 +34,7 @@ const registerVendor = asyncHandler(async (req, res) => {
       slNo,
       name,
       password,
-      phone,
+      phone: mobile,
       milkType,
       isActive: true,
       address,
@@ -53,69 +55,85 @@ const registerVendor = asyncHandler(async (req, res) => {
   }
 });
 
-// update user status
 const updateUserStatus = asyncHandler(async (req, res) => {
-  const { slNo, userId, isActive } = req.body;
-  if (!slNo || !userId || isActive === undefined) {
-    throw new ApiError(400, 'Error: User ID, Sl NO and Status are required.');
-  }
-  const parsedSlNo = parseInt(slNo);
-  if (isNaN(parsedSlNo) || parsedSlNo <= 0) {
-    throw new ApiError(
-      400,
-      'Invalid SL No: It must be a positive number (cannot be 0, null, or empty)'
-    );
-  }
-  try {
-    const user = await User.findById(userId);
-    if (!user) {
-      throw new ApiError(404, `User not found with the provided ID.`);
+  const { id } = req.params;
+  const { slNo, name, isActive, address, phone, milkType } = req.body;
+
+  if (!id) throw new ApiError(400, 'User ID is required.');
+
+  const user = await User.findById(id);
+  if (!user) throw new ApiError(404, 'User not found.');
+
+  
+  const status = isActive === 'true' || isActive === true;
+
+  if (status === false) {
+    // --- CASE: DEACTIVATE USER ---
+    user.isActive = false;
+    user.slNo = null; 
+  } else {
+    
+    const parsedSlNo = parseInt(slNo);
+    if (!parsedSlNo || isNaN(parsedSlNo)) {
+      throw new ApiError(400, 'Active user must have a valid Serial Number.');
     }
 
-    // case 1: deactivating
-    if (isActive === 'false') {
-      user.slNo = null;
-      user.isActive = false;
-    } // case 2: Activating User
-    else if (isActive === 'true') {
-      const alreadyTaken = await User.findOne({
-        slNo: parsedSlNo,
-        isActive: true,
-        _id: { $ne: userId },
-      });
-      if (alreadyTaken) {
-        throw new ApiError(409, 'Conflict: This SL No is already assigned to another active user.');
-      }
-      await User.updateMany({ slNo: parsedSlNo, isActive: false }, { $set: { slNo: null } });
-      user.slNo = parsedSlNo;
-      user.isActive = true;
+    // Check if this SL No is already taken by ANOTHER ACTIVE user
+    const alreadyTaken = await User.findOne({
+      slNo: parsedSlNo,
+      isActive: true,
+      _id: { $ne: id },
+    });
+
+    if (alreadyTaken) {
+      throw new ApiError(
+        409,
+        `Conflict: SL No ${parsedSlNo} is already assigned to ${alreadyTaken.name}`
+      );
     }
-    await user.save();
-    const updatedUser = await User.findById(userId);
-    return res
-      .status(200)
-      .json(new ApiResponse(200, updatedUser, 'User status changed successfully'));
-  } catch (error) {
-    if (error instanceof ApiError) throw error;
-    throw new ApiError(500, error.message || 'Something went wrong while updating user status');
+
+  
+    await User.updateMany({ slNo: parsedSlNo, isActive: false }, { $set: { slNo: null } });
+
+    user.slNo = parsedSlNo;
+    user.isActive = true;
   }
+
+  // Common Fields Update (Admin can change these anytime)
+  if (name) user.name = name;
+  if (address) user.address = address;
+  if (phone) user.phone = phone;
+  if (milkType) user.milkType = milkType;
+
+  await user.save();
+
+  const updatedUser = await User.findById(id).select('-password');
+  return res.status(200).json(new ApiResponse(200, updatedUser, 'Vendor updated successfully'));
 });
 
 // login user
 const loginUser = asyncHandler(async (req, res) => {
-  const { slNo, password,  } = req.body;
+  const { slNo, password } = req.body;
   if (!slNo || !password) {
     throw new ApiError(400, 'Please fill all details.');
   }
-  const parsedSlNo = parseInt(slNo);
-  if (isNaN(parsedSlNo) || parsedSlNo <= 0) {
-    throw new ApiError(
-      400,
-      'Invalid SL No: It must be a positive number (cannot be 0, null, or empty)'
-    );
+
+  let query = {};
+  if (typeof slNo === 'string' && slNo.toLowerCase().trim() === 'admin') {
+    query = { role: 'admin' };
+  } else {
+    const parsedSlNo = parseInt(slNo);
+    if (isNaN(parsedSlNo) || parsedSlNo <= 0) {
+      throw new ApiError(
+        400,
+        'Invalid SL No: It must be a positive number (cannot be 0, null, or empty)'
+      );
+    }
+    query = { slNo: parsedSlNo };
   }
+
   try {
-    const user = await User.findOne({ slNo: parsedSlNo });
+    const user = await User.findOne(query);
     if (!user) {
       throw new ApiError(404, 'User not found: No account associated with this SL No.');
     }
@@ -149,4 +167,29 @@ const getAllUsers = asyncHandler(async (req, res) => {
   }
 });
 
-export { registerVendor, updateUserStatus, loginUser, getAllUsers };
+const getUserBySlNoAndName = asyncHandler(async (req, res) => {
+  const { slNo } = req.params;
+  if (!slNo) {
+    throw new ApiError(400, 'Please fill all details.');
+  }
+  const isNumber = /^\d+$/.test(slNo);
+  let query;
+  if (isNumber) {
+    const parsedSlNo = parseInt(slNo);
+    query = { slNo: parsedSlNo };
+  } else {
+    query = { name: { $regex: slNo, $options: 'i' } };
+  }
+  try {
+    const user = await User.find(query).select('-password');
+    if (!user) {
+      throw new ApiError(404, 'User not found: No account associated with this SL No or Name.');
+    }
+    return res.status(200).json(new ApiResponse(200, user, 'Success: User retrieved successfully'));
+  } catch (error) {
+    if (error instanceof ApiError) throw error;
+    throw new ApiError(500, error.message || 'An unexpected error occurred while fetching user.');
+  }
+});
+
+export { registerVendor, updateUserStatus, loginUser, getAllUsers, getUserBySlNoAndName };
