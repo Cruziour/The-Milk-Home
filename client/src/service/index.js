@@ -49,3 +49,70 @@ export const updateVendorService = async (id, updatedData) => {
     throw error;
   }
 };
+
+export const getAllVendorsService = async () => {
+  try {
+    const { data } = await axiosInstance.get("/api/v1/user/get-all-users");
+    return data;
+  } catch (error) {
+    console.error("getAllVendorsService error:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+// Milk related services can be added here in the future
+export const getAllMilkEntriesBySlNoService = async (slNo = null, logMonth, logYear) => {
+  try {
+    const { data } = await axiosInstance.get("/api/v1/milk/get-entries-by-slno", {
+      params: {
+        slNo,
+        month: logMonth,
+        year: logYear,
+      },
+      withCredentials: true,
+    });
+    return data;
+  } catch (error) {
+    console.error("getAllMilkEntriesService error:", error.response?.data || error.message);
+    throw error;
+  }
+};
+export const getAllMilkEntriesService = async (logMonth, logYear) => {
+  try {
+    const { data } = await axiosInstance.get("/api/v1/milk/get-entries", {
+      params: {
+        month: logMonth,
+        year: logYear,
+      },
+      withCredentials: true,
+    });
+    return data;
+  } catch (error) {
+    console.error("getAllMilkEntriesService error:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const addMilkEntryService = async payload => {
+  try {
+    const { data } = await axiosInstance.post("/api/v1/milk/add", payload, {
+      withCredentials: true,
+    });
+    return data;
+  } catch (error) {
+    console.error("addMilkEntryService error:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const updateMilkEntryService = async (entryId, payload) => {
+  try {
+    const { data } = await axiosInstance.put(`/api/v1/milk/update-entry/${entryId}`, payload, {
+      withCredentials: true,
+    });
+    return data;
+  } catch (error) {
+    console.error("updateMilkEntryService error:", error.response?.data || error.message);
+    throw error;
+  }
+};

@@ -71,7 +71,35 @@ const addMilkEntry = asyncHandler(async (req, res) => {
   }
 });
 
-const updateMilkEntry = asyncHandler(async (req, res) => {});
+const updateMilkEntry = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { morningQty, morningAmount, eveningQty, eveningAmount } = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new ApiError(400, 'Invalid entry ID');
+  }
+
+  try {
+    const milkEntry = await MilkEntry.findById(id);
+
+    if (!milkEntry) {
+      throw new ApiError(404, 'Milk entry not found');
+    }
+
+    // Update values
+    if (morningQty !== undefined) milkEntry.morning.qty = parseFloat(morningQty);
+    if (morningAmount !== undefined) milkEntry.morning.amount = parseFloat(morningAmount);
+    if (eveningQty !== undefined) milkEntry.evening.qty = parseFloat(eveningQty);
+    if (eveningAmount !== undefined) milkEntry.evening.amount = parseFloat(eveningAmount);
+
+    // Save will trigger pre-save hook for dayTotalAmount and dayTotalMilk
+    await milkEntry.save();
+
+    return res.status(200).json(new ApiResponse(200, milkEntry, 'Milk entry updated successfully'));
+  } catch (error) {
+    throw new ApiError(500, error.message || 'Error occurred while updating milk entry');
+  }
+});
 
 const getMilkEntries = asyncHandler(async (req, res) => {
   const { month, year } = req.query; // Query parameters for month and year
@@ -117,6 +145,7 @@ const getMilkEntries = asyncHandler(async (req, res) => {
           morning: 1,
           evening: 1,
           vendor: {
+            _id: '$vendorDetails._id',
             slNo: '$vendorDetails.slNo',
             name: '$vendorDetails.name',
             role: '$vendorDetails.role',
@@ -193,6 +222,7 @@ const getMilkEntriesBySlNo = asyncHandler(async (req, res) => {
             name: '$vendorDetails.name',
             role: '$vendorDetails.role',
             milkType: '$vendorDetails.milkType',
+            address: '$vendorDetails.address',
           },
         },
       },

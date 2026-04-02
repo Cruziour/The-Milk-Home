@@ -3,8 +3,6 @@ import { ApiError, ApiResponse, asyncHandler } from '../utils/index.js';
 
 // register user
 const registerVendor = asyncHandler(async (req, res) => {
-  console.log(req.body);
-
   const { slNo, name, mobile, password, address, milkType } = req.body;
   if (!name || !slNo || !password || !mobile || !milkType || !address) {
     throw new ApiError(400, 'All fields are required');
@@ -64,15 +62,13 @@ const updateUserStatus = asyncHandler(async (req, res) => {
   const user = await User.findById(id);
   if (!user) throw new ApiError(404, 'User not found.');
 
-  
   const status = isActive === 'true' || isActive === true;
 
   if (status === false) {
     // --- CASE: DEACTIVATE USER ---
     user.isActive = false;
-    user.slNo = null; 
+    user.slNo = null;
   } else {
-    
     const parsedSlNo = parseInt(slNo);
     if (!parsedSlNo || isNaN(parsedSlNo)) {
       throw new ApiError(400, 'Active user must have a valid Serial Number.');
@@ -92,7 +88,6 @@ const updateUserStatus = asyncHandler(async (req, res) => {
       );
     }
 
-  
     await User.updateMany({ slNo: parsedSlNo, isActive: false }, { $set: { slNo: null } });
 
     user.slNo = parsedSlNo;
