@@ -16,7 +16,6 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-
 // import routes
 import userRoutes from './routes/user.routes.js';
 import milkRoutes from './routes/milk.routes.js';

@@ -23,7 +23,7 @@ const FILTER_OPTIONS = ["active", "all", "deactive"];
 const UserList = () => {
   const dispatch = useDispatch();
 
-  // Direct useSelector - No custom hooks
+  // Direct useSelector
   const filteredUsers = useSelector(selectFilteredUsers);
   const selectedUser = useSelector(selectSelectedUser);
   const userFilter = useSelector(selectUserFilter);
@@ -143,7 +143,7 @@ const UserCard = ({ user, isSelected, onSelect }) => (
   >
     <div className="flex justify-between items-center mb-1">
       <span
-        className={`text-[10px] font-black ${user.slNo ? "text-indigo-500" : "text-red-400 italic"}`}
+        className={`text-[12px] font-black ${user.slNo ? "text-indigo-900" : "text-red-400 italic"}`}
       >
         {user.slNo ? `#${user.slNo}` : "No SlNo"}
       </span>
@@ -156,11 +156,15 @@ const UserCard = ({ user, isSelected, onSelect }) => (
         />
       </div>
     </div>
-    <p className="text-xs font-black uppercase text-gray-800 truncate group-hover:text-indigo-600">
-      {user.name}
+    <p className="text-sm font-black uppercase text-gray-800 truncate group-hover:text-indigo-600">
+      {user?.name}
     </p>
-    {user.milkType && (
-      <span className="text-[8px] font-bold text-gray-400 uppercase">{user.milkType}</span>
+
+    {user?.milkType && (
+      <span className="text-[10px] font-bold text-gray-600 uppercase pr-5">{user.milkType}</span>
+    )}
+    {user?.address && (
+      <span className="text-[10px] font-bold text-gray-600 uppercase truncate">{user?.address}</span>
     )}
   </div>
 );

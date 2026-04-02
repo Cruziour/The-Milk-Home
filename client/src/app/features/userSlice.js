@@ -24,7 +24,8 @@ const userSlice = createSlice({
       state.error = action.payload;
     },
     setAllUsers: (state, action) => {
-      state.allUsers = action.payload;
+      const userData = Array.isArray(action.payload) ? action.payload : action.payload?.data || [];
+      state.allUsers = userData;
       state.lastFetched = Date.now();
       state.isLoading = false;
       state.isRefreshing = false;
@@ -64,9 +65,7 @@ const userSlice = createSlice({
   },
 });
 
-// ============================================
 // ACTIONS EXPORT
-// ============================================
 export const {
   setLoading,
   setRefreshing,
@@ -82,10 +81,9 @@ export const {
   resetUsersState,
 } = userSlice.actions;
 
-// ============================================
+
 // BASE SELECTORS
-// ============================================
-export const selectAllUsers = state => state.users.allUsers;
+export const selectAllUsers = state => state.users.allUsers || [];
 export const selectSelectedUser = state => state.users.selectedUser;
 export const selectUserFilter = state => state.users.userFilter;
 export const selectUsersLoading = state => state.users.isLoading;
@@ -93,9 +91,8 @@ export const selectUsersRefreshing = state => state.users.isRefreshing;
 export const selectUsersError = state => state.users.error;
 export const selectUsersLastFetched = state => state.users.lastFetched;
 
-// ============================================
+
 // MEMOIZED SELECTORS
-// ============================================
 export const selectFilteredUsers = createSelector(
   [selectAllUsers, selectUserFilter],
   (allUsers, userFilter) => {
@@ -132,7 +129,5 @@ export const makeSelectUserBySlNo = () =>
     (allUsers, slNo) => allUsers.find(user => user.slNo === slNo) || null
   );
 
-// ============================================
 // DEFAULT EXPORT
-// ============================================
 export default userSlice.reducer;

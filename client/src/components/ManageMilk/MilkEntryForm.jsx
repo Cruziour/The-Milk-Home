@@ -3,14 +3,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { Save, Calendar, AlertCircle, Loader2 } from "lucide-react";
 import { addMilkEntryService } from "../../service/index.js";
 import { selectSelectedUser } from "../../app/features/userSlice";
-import { setSaving, addEntryToList, selectIsSaving } from "../../app/features/milkEntrySlice";
+import {
+  setSaving,
+  addEntryToList,
+  selectIsSaving,
+  updateEntryInList,
+} from "../../app/features/milkEntrySlice";
 import NumberInput from "../common/NumberInput";
 import { getTodayDate } from "../../utils/dateUtils";
 
 const MilkEntryForm = ({ onSuccess, onError }) => {
   const dispatch = useDispatch();
-
-  // Direct useSelector - No custom hooks
   const selectedUser = useSelector(selectSelectedUser);
   const isSaving = useSelector(selectIsSaving);
 
@@ -38,7 +41,6 @@ const MilkEntryForm = ({ onSuccess, onError }) => {
   };
 
   const handleSaveEntry = async () => {
-    // Validations
     if (!selectedUser) {
       onError?.("Please select a user from the list first!");
       return;
@@ -67,8 +69,9 @@ const MilkEntryForm = ({ onSuccess, onError }) => {
 
     try {
       dispatch(setSaving(true));
-      const newEntry = await addMilkEntryService(payload);
+      const newEntry = await addMilkEntryService(payload);     
       dispatch(addEntryToList(newEntry));
+      dispatch(updateEntryInList(newEntry?.data));
       resetForm();
       onSuccess?.("Record saved successfully!");
     } catch (err) {
@@ -135,7 +138,7 @@ const MilkEntryForm = ({ onSuccess, onError }) => {
           <button
             onClick={handleSaveEntry}
             disabled={isSaving || isEntryDisabled}
-            className="w-full bg-gray-900 hover:bg-black text-white font-black py-5 rounded-[2rem] uppercase text-xs tracking-[0.3em] shadow-xl transition-all active:scale-95 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
+            className="w-full bg-gray-900 hover:bg-black text-white font-black py-5 rounded-4xl uppercase text-xs tracking-[0.3em] shadow-xl transition-all active:scale-95 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
           >
             {isSaving ? (
               <>
@@ -162,7 +165,7 @@ const WarningBox = ({ type, message }) => {
 
   return (
     <div className={`border rounded-2xl p-4 flex items-center gap-3 ${styles[type]}`}>
-      <AlertCircle size={20} className={`flex-shrink-0 ${iconColor}`} />
+      <AlertCircle size={20} className={`shrink-0 ${iconColor}`} />
       <p className="text-xs font-bold">{message}</p>
     </div>
   );

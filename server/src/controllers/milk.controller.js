@@ -72,14 +72,15 @@ const addMilkEntry = asyncHandler(async (req, res) => {
 });
 
 const updateMilkEntry = asyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const { entryId } = req.params;
   const { morningQty, morningAmount, eveningQty, eveningAmount } = req.body;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+  if (!mongoose.Types.ObjectId.isValid(entryId)) {
     throw new ApiError(400, 'Invalid entry ID');
   }
 
   try {
+    const id = new mongoose.Types.ObjectId(entryId);
     const milkEntry = await MilkEntry.findById(id);
 
     if (!milkEntry) {
@@ -144,12 +145,15 @@ const getMilkEntries = asyncHandler(async (req, res) => {
           date: 1,
           morning: 1,
           evening: 1,
+          dayTotalMilk: 1,
+          dayTotalAmount: 1,
           vendor: {
             _id: '$vendorDetails._id',
             slNo: '$vendorDetails.slNo',
             name: '$vendorDetails.name',
             role: '$vendorDetails.role',
             milkType: '$vendorDetails.milkType',
+            address: '$vendorDetails.address',
           },
         },
       },
@@ -217,7 +221,10 @@ const getMilkEntriesBySlNo = asyncHandler(async (req, res) => {
           date: 1,
           morning: 1,
           evening: 1,
+          dayTotalMilk: 1,
+          dayTotalAmount: 1,
           vendor: {
+            _id: '$vendorDetails._id',
             slNo: '$vendorDetails.slNo',
             name: '$vendorDetails.name',
             role: '$vendorDetails.role',
@@ -256,6 +263,8 @@ const getMilkEntriesBySlNo = asyncHandler(async (req, res) => {
 
 const exportMilkEntries = asyncHandler(async (req, res) => {
   const { slNo, month, year, format } = req.query;
+  console.log(req.params);
+
   if (!month || !year || !format) {
     throw new ApiError(400, 'Month, Year, and Format query parameters are required');
   }
@@ -315,6 +324,7 @@ const exportMilkEntries = asyncHandler(async (req, res) => {
           dayTotalMilk: 1,
           dayTotalAmount: 1,
           vendor: {
+            _id: '$vendorDetails._id',
             slNo: '$vendorDetails.slNo',
             name: '$vendorDetails.name',
             role: '$vendorDetails.role',

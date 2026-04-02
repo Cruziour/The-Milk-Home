@@ -47,8 +47,6 @@ const Home = () => {
             technology. We provide a digital ecosystem to ensure every drop of milk is accounted for
             with 100% precision.
           </p>
-
-          
         </div>
 
         <div className="w-full md:w-80 backdrop-blur-xl bg-white/5 border border-white/10 rounded-[2.5rem] p-8 shadow-2xl">

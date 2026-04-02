@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { Eye, EyeOff, AlertCircle } from "lucide-react";
 import { addVendorService } from "../service/index.js";
+import useToast from "../hooks/useToast.js";
+import Toast from "../components/common/Toast.jsx";
 
 const AddVendor = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { toast, showSuccess, showError, hideToast } = useToast();
 
   const [formData, setFormData] = useState({
     slNo: "",
@@ -29,11 +32,12 @@ const AddVendor = () => {
     try {
       const response = await addVendorService(formData);
       if (response.success) {
-        alert("Vendor registered successfully!");
+        showSuccess(response?.message);
       }
       setFormData({ slNo: "", name: "", mobile: "", password: "", address: "", milkType: "Cow" });
     } catch (err) {
       setError(err.response?.data?.message || err.message || "Something went wrong!");
+      showError(err.message);
     } finally {
       setLoading(false);
     }
@@ -42,6 +46,7 @@ const AddVendor = () => {
   return (
     <div className="flex justify-center items-start pt-10 min-h-[calc(100vh-80px)] bg-[#F5F5F5] px-4 font-sans">
       <div className="w-full max-w-xl bg-white shadow-lg rounded-xl overflow-hidden border border-gray-200">
+        {toast && <Toast message={toast.message} type={toast.type} onClose={hideToast} />}
         <div className="bg-indigo-600 p-6 text-white text-center">
           <h2 className="text-2xl font-bold uppercase tracking-wider">Register New Vendor</h2>
           <p className="text-indigo-100 text-sm mt-1">
@@ -66,6 +71,7 @@ const AddVendor = () => {
                 type="number"
                 name="slNo"
                 value={formData.slNo}
+                placeholder="Enter Serial Number"
                 onChange={handleChange}
                 className={`p-3 border rounded-lg outline-none focus:ring-2 transition-all font-semibold appearance-none ${error && error.includes("Serial") ? "border-red-500 ring-red-200" : "border-gray-300 ring-indigo-500"}`}
                 required
@@ -97,6 +103,7 @@ const AddVendor = () => {
               name="name"
               value={formData.name}
               onChange={handleChange}
+              placeholder="Name"
               className="p-3 border border-gray-300 rounded-lg outline-none focus:ring-2 ring-indigo-500 font-semibold"
               required
             />
@@ -110,6 +117,7 @@ const AddVendor = () => {
               <input
                 type="number"
                 name="mobile"
+                placeholder="Mobile Number"
                 value={formData.mobile}
                 onChange={handleChange}
                 className="p-3 border border-gray-300 rounded-lg outline-none focus:ring-2 ring-indigo-500 font-semibold appearance-none"
@@ -125,6 +133,7 @@ const AddVendor = () => {
                   type={showPassword ? "text" : "password"}
                   name="password"
                   value={formData.password}
+                  placeholder="password"
                   onChange={handleChange}
                   className="p-3 w-full border border-gray-300 rounded-lg outline-none focus:ring-2 ring-indigo-500 font-semibold"
                   required
@@ -148,6 +157,7 @@ const AddVendor = () => {
               name="address"
               rows="2"
               value={formData.address}
+              placeholder="address"
               onChange={handleChange}
               className="p-3 border border-gray-300 rounded-lg outline-none focus:ring-2 ring-indigo-500 font-semibold resize-none"
             ></textarea>

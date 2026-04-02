@@ -36,7 +36,8 @@ const milkEntrySlice = createSlice({
     },
     setAllEntries: (state, action) => {
       const { entries, month, year } = action.payload;
-      state.allEntries = entries;
+      const entriesData = Array.isArray(entries) ? entries : entries?.data || [];
+      state.allEntries = entriesData;
       state.fetchedMonthKey = `${month}-${year}`;
       state.lastFetched = Date.now();
       state.isLoading = false;
@@ -122,8 +123,6 @@ export const makeSelectUserEntriesWithSummary = () =>
     if (entries.length === 0) {
       return { entries: [], totalSummary: null };
     }
-
-    console.log(entries, "hhe");
 
     const totalSummary = entries.reduce(
       (acc, entry) => {

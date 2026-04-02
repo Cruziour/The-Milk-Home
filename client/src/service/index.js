@@ -1,15 +1,5 @@
 import axiosInstance from "../api/axiosInstance.js";
 
-export const registerVendorService = async payload => {
-  try {
-    const { data } = await axiosInstance.post("/api/v1/user", payload);
-    return data;
-  } catch (error) {
-    console.error("registerVendorService error:", error.response?.data || error.message);
-    throw error;
-  }
-};
-
 export const loginUserService = async ({ slNo, password }) => {
   try {
     const { data } = await axiosInstance.post("/api/v1/user/login", { slNo, password });
@@ -60,8 +50,8 @@ export const getAllVendorsService = async () => {
   }
 };
 
-// Milk related services can be added here in the future
-export const getAllMilkEntriesBySlNoService = async (slNo = null, logMonth, logYear) => {
+// Milk related services
+export const getAllMilkEntriesBySlNoService = async (slNo, logMonth, logYear) => {
   try {
     const { data } = await axiosInstance.get("/api/v1/milk/get-entries-by-slno", {
       params: {
@@ -113,6 +103,18 @@ export const updateMilkEntryService = async (entryId, payload) => {
     return data;
   } catch (error) {
     console.error("updateMilkEntryService error:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const exportMilkEntriesService = async (slNo, month, year, format) => {
+  try {
+    return await axiosInstance.get("/api/v1/milk/export", {
+      params: { slNo, month, year, format }, 
+      responseType: "blob",
+    });
+  } catch (error) {
+    console.error("exportMilkEntriesService error:", error.response?.data || error.message);
     throw error;
   }
 };

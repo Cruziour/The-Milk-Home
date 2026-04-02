@@ -39,6 +39,10 @@ const LogCard = ({ log, onUpdateSuccess, onUpdateError }) => {
   };
 
   const saveEdit = async () => {
+    if (!log._id) {
+      onUpdateError?.("Entry ID is missing!");
+      return;
+    }
     try {
       const updateData = {
         morningQty: parseFloat(tempData.morningQty) || 0,
@@ -47,9 +51,8 @@ const LogCard = ({ log, onUpdateSuccess, onUpdateError }) => {
         eveningAmount: parseFloat(tempData.eveningAmount) || 0,
       };
 
-      const response = await updateMilkEntryService(log._id, updateData);
-      dispatch(updateEntryInList(response.updatedEntry));
-
+      const response = await updateMilkEntryService(log._id, updateData);      
+      dispatch(updateEntryInList(response?.data));
       setIsEditing(false);
       onUpdateSuccess?.("Record updated successfully!");
     } catch (error) {
@@ -77,7 +80,6 @@ const LogCard = ({ log, onUpdateSuccess, onUpdateError }) => {
 
   return (
     <div className="bg-white p-6 rounded-[2.5rem] border border-gray-100 shadow-xl shadow-gray-200/40 transition-all">
-      {/* Header */}
       <div className="flex justify-between items-center mb-5 pb-3 border-b border-gray-100">
         <div className="flex items-center gap-2">
           <Calendar size={14} className="text-indigo-400" />
@@ -113,7 +115,6 @@ const LogCard = ({ log, onUpdateSuccess, onUpdateError }) => {
         )}
       </div>
 
-      {/* Content */}
       {isEditing ? (
         <EditForm data={tempData} onChange={handleTempChange} />
       ) : (
@@ -133,7 +134,6 @@ const LogCard = ({ log, onUpdateSuccess, onUpdateError }) => {
   );
 };
 
-// Edit Form Component
 const EditForm = ({ data, onChange }) => (
   <div className="space-y-4 animate-in fade-in slide-in-from-top-1">
     <div className="grid grid-cols-2 gap-3">
@@ -183,7 +183,6 @@ const EditForm = ({ data, onChange }) => (
   </div>
 );
 
-// Display Data Component
 const DisplayData = ({ log }) => (
   <div className="grid grid-cols-2 gap-4 animate-in fade-in">
     <div className="bg-orange-50/50 p-4 rounded-2xl border border-orange-100">

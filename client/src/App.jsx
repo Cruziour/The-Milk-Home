@@ -1,6 +1,4 @@
 import React from "react";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import {
   createBrowserRouter,
   createRoutesFromChildren,
@@ -22,15 +20,6 @@ import {
 } from "./pages/index.js";
 
 const App = () => {
-  const mode = useSelector(state => state.theme.mode);
-  useEffect(() => {
-    const root = document.documentElement;
-    if (mode === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-  }, [mode]);
   const router = createBrowserRouter(
     createRoutesFromChildren(
       <Route path="/" element={<Layout />}>

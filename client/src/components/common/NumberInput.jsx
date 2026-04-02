@@ -18,10 +18,8 @@ const NumberInput = ({
   };
 
   const handleKeyDown = e => {
-    // Allow: backspace, delete, tab, escape, enter, decimal point
     if (
       [46, 8, 9, 27, 13, 110, 190].includes(e.keyCode) ||
-      // Allow: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
       (e.keyCode === 65 && e.ctrlKey) ||
       (e.keyCode === 67 && e.ctrlKey) ||
       (e.keyCode === 86 && e.ctrlKey) ||
@@ -31,7 +29,7 @@ const NumberInput = ({
     ) {
       return;
     }
-    // Block if not a number
+
     if ((e.shiftKey || e.keyCode < 48 || e.keyCode > 57) && (e.keyCode < 96 || e.keyCode > 105)) {
       e.preventDefault();
     }

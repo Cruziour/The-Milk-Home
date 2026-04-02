@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { X, CheckCircle, XCircle, AlertCircle } from "lucide-react";
 
-const Toast = ({ message, type = "success", onClose, duration = 4000 }) => {
+const Toast = ({ message, type = "success", onClose, duration = 40000 }) => {
   useEffect(() => {
     const timer = setTimeout(onClose, duration);
     return () => clearTimeout(timer);

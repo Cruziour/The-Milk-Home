@@ -22,7 +22,7 @@ import {
 const Header = ({ onSuccess, onError }) => {
   const dispatch = useDispatch();
 
-  // Direct useSelector - No custom hooks
+  // Direct useSelector 
   const isUsersRefreshing = useSelector(selectUsersRefreshing);
   const isEntriesRefreshing = useSelector(selectEntriesRefreshing);
   const currentMonth = useSelector(selectCurrentMonth);
@@ -48,13 +48,11 @@ const Header = ({ onSuccess, onError }) => {
 
   const handleRefresh = async () => {
     try {
-      // Fetch users
       dispatch(setUsersRefreshing(true));
       dispatch(setUsersError(null));
       const users = await getAllVendorsService();
       dispatch(setAllUsers(users));
 
-      // Fetch entries
       dispatch(setEntriesRefreshing(true));
       dispatch(setEntriesError(null));
       const entries = await getAllMilkEntriesService(currentMonth, currentYear);

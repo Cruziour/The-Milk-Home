@@ -140,7 +140,7 @@ const LogsSection = ({ onSuccess, onError }) => {
       </div>
     </div>
   );
-};;
+};
 
 const EmptyState = ({ hasUser }) => (
   <div className="text-center py-20 opacity-20">

@@ -16,6 +16,8 @@ import {
   PencilLine,
 } from "lucide-react";
 import { getUserBySlNoAndNameService, updateVendorService } from "../service/index.js";
+import useToast from "../hooks/useToast.js";
+import Toast from "../components/common/Toast.jsx";
 
 const VendorUpdate = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -25,6 +27,7 @@ const VendorUpdate = () => {
   const [success, setSuccess] = useState(false);
   const [vendorList, setVendorList] = useState([]);
   const [selectedVendor, setSelectedVendor] = useState(null);
+  const { toast, showSuccess, showError, hideToast } = useToast();
   const [formData, setFormData] = useState({
     slNo: "",
     name: "",
@@ -70,11 +73,19 @@ const VendorUpdate = () => {
     setError(null);
     try {
       const res = await getUserBySlNoAndNameService({ slNo: searchInput.trim() });
-      if (res.data.length === 0) setError("No vendor found with these details.");
-      else if (res.data.length === 1) selectUser(res.data[0]);
-      else setVendorList(res.data);
+      if (res.data.length === 0) {
+        setError("No vendor found with these details.");
+        showError("No vendor found with these details.");
+      } else if (res.data.length === 1) {
+        selectUser(res.data[0]);
+        showSuccess(res?.message);
+      } else {
+        setVendorList(res.data);
+        showSuccess(res?.message);
+      }
     } catch (err) {
       setError(err.message || "Search failed. Please try again.");
+      showError(err.message);
     } finally {
       setLoading(false);
     }
@@ -85,8 +96,10 @@ const VendorUpdate = () => {
     setUpdating(true);
     setError(null);
     try {
-      await updateVendorService(formData._id, formData);
+      const res = await updateVendorService(formData._id, formData);
+
       setSuccess(true);
+      showSuccess(res.message);
       setTimeout(() => {
         setSuccess(false);
         setSelectedVendor(null);
@@ -94,6 +107,7 @@ const VendorUpdate = () => {
       }, 2000);
     } catch (err) {
       setError(err.response?.data?.message || "Update failed. Please check inputs.");
+      showError(err.message);
     } finally {
       setUpdating(false);
     }
@@ -102,6 +116,7 @@ const VendorUpdate = () => {
   return (
     <div className="min-h-[90vh] bg-[#f8fafc] p-4 md:p-8 flex justify-center items-start md:items-center">
       <div className="w-full max-w-2xl bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(79,70,229,0.1)] overflow-hidden border border-gray-100">
+        {toast && <Toast message={toast.message} type={toast.type} onClose={hideToast} />}
         {/* Header Section */}
         <div className="bg-indigo-600 p-8 text-center text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl" />

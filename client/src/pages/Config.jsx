@@ -1,11 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const Config = () => {
-  return (
-    <div>
-      Config Page
-    </div>
-  )
-}
+  return <div>Config Page</div>;
+};
 
-export default Config
+export default Config;
