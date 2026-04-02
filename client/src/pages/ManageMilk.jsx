@@ -1,7 +1,7 @@
 import React from "react";
-import useToast from "../hooks/useToast";
+import useToast from "../hooks/useToast.js";
 import { Header, UserList, MilkEntryForm, LogsSection } from "../components/ManageMilk/index.js";
-import Toast from "../components/common/Toast";
+import Toast from "../components/common/Toast.jsx";
 
 const GlobalStyles = () => (
   <style>{`

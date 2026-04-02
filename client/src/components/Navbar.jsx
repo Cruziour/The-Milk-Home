@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { clearUser } from "../app/features/authSlice";
+import { clearUser } from "../app/features/authSlice.js";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);

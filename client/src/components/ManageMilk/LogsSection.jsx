@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { History, Hash, RefreshCw } from "lucide-react";
 import { getAllMilkEntriesService } from "../../service/index.js";
-import { selectSelectedUser } from "../../app/features/userSlice";
+import { selectSelectedUser } from "../../app/features/userSlice.js";
 import {
   setLoading,
   setRefreshing,
@@ -15,10 +15,10 @@ import {
   selectEntriesRefreshing,
   selectFetchedMonthKey,
   makeSelectUserEntriesWithSummary,
-} from "../../app/features/milkEntrySlice";
-import { SectionLoader } from "../common/Loader";
-import MonthNavigator from "./MonthNavigator";
-import MonthlySummary from "./MonthlySummary";
+} from "../../app/features/milkEntrySlice.js";
+import { SectionLoader } from "../common/Loader.jsx";
+import MonthNavigator from "./MonthNavigator.jsx";
+import MonthlySummary from "./MonthlySummary.jsx";
 import LogCard from "./LogCard";
 
 const LogsSection = ({ onSuccess, onError }) => {

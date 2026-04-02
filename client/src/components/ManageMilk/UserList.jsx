@@ -15,8 +15,8 @@ import {
   selectUsersLoading,
   selectUsersRefreshing,
   selectUsersLastFetched,
-} from "../../app/features/userSlice";
-import { SectionLoader } from "../common/Loader";
+} from "../../app/features/userSlice.js";
+import { SectionLoader } from "../common/Loader.jsx";
 
 const FILTER_OPTIONS = ["active", "all", "deactive"];
 

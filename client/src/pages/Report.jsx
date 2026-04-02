@@ -14,7 +14,7 @@ import {
   exportMilkEntriesService,
   getAllMilkEntriesBySlNoService,
   getAllMilkEntriesService,
-} from "../service";
+} from "../service/index.js";
 import useToast from "../hooks/useToast.js";
 import Toast from "../components/common/Toast.jsx";
 

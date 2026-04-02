@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Save, Calendar, AlertCircle, Loader2 } from "lucide-react";
 import { addMilkEntryService } from "../../service/index.js";
-import { selectSelectedUser } from "../../app/features/userSlice";
+import { selectSelectedUser } from "../../app/features/userSlice.js";
 import {
   setSaving,
   addEntryToList,
   selectIsSaving,
   updateEntryInList,
-} from "../../app/features/milkEntrySlice";
-import NumberInput from "../common/NumberInput";
-import { getTodayDate } from "../../utils/dateUtils";
+} from "../../app/features/milkEntrySlice.js";
+import NumberInput from "../common/NumberInput.jsx";
+import { getTodayDate } from "../../utils/dateUtils.js";
 
 const MilkEntryForm = ({ onSuccess, onError }) => {
   const dispatch = useDispatch();

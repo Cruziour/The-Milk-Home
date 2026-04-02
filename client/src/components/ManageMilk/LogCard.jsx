@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Calendar, Edit2, X, Check, Loader2 } from "lucide-react";
-import { selectIsUpdating, updateEntryInList } from "../../app/features/milkEntrySlice";
-import NumberInput from "../common/NumberInput";
-import { formatDate } from "../../utils/dateUtils";
+import { selectIsUpdating, updateEntryInList } from "../../app/features/milkEntrySlice.js";
+import NumberInput from "../common/NumberInput.jsx";
+import { formatDate } from "../../utils/dateUtils.js";
 import { updateMilkEntryService } from "../../service/index.js";
 
 const LogCard = ({ log, onUpdateSuccess, onUpdateError }) => {
@@ -51,7 +51,7 @@ const LogCard = ({ log, onUpdateSuccess, onUpdateError }) => {
         eveningAmount: parseFloat(tempData.eveningAmount) || 0,
       };
 
-      const response = await updateMilkEntryService(log._id, updateData);      
+      const response = await updateMilkEntryService(log._id, updateData);
       dispatch(updateEntryInList(response?.data));
       setIsEditing(false);
       onUpdateSuccess?.("Record updated successfully!");

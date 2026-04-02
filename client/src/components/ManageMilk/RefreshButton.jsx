@@ -1,13 +1,13 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RefreshCw } from "lucide-react";
-import { fetchAllUsers, selectUsersRefreshing } from "../../store/slices/userSlice";
+import { fetchAllUsers, selectUsersRefreshing } from "../../store/slices/userSlice.js";
 import {
   fetchAllMilkEntries,
   selectCurrentMonth,
   selectCurrentYear,
   selectEntriesRefreshing,
-} from "../../store/slices/milkEntrySlice";
+} from "../../store/slices/milkEntrySlice.js";
 
 const RefreshButton = ({
   onSuccess,

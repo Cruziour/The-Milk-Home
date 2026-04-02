@@ -6,8 +6,8 @@ import {
   selectCurrentYear,
   navigateToPrevMonth,
   navigateToNextMonth,
-} from "../../app/features/milkEntrySlice";
-import { getMonthName } from "../../utils/dateUtils";
+} from "../../app/features/milkEntrySlice.js";
+import { getMonthName } from "../../utils/dateUtils.js";
 
 const MonthNavigator = () => {
   const dispatch = useDispatch();
