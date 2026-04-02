@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import MilkLogo from "../components/shared/milkLogo.jsx";
+import MilkLogo from "../components/shared/MilkLogo.jsx";
 import { loginUserService } from "../service/index.js";
 import { setAuth } from "../app/features/authSlice.js";
 
