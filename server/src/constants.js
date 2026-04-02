@@ -1,1 +1,1 @@
-export const DB_NAME = 'myappdb';
+export const DB_NAME = 'The-Milk-Home';
