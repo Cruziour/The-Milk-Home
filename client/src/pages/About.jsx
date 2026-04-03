@@ -6,7 +6,7 @@ import {
   ShieldCheck,
   Smartphone,
   Clock,
-  Users,
+  FileText,
   TrendingUp,
   CheckCircle2,
   Zap,
@@ -65,10 +65,26 @@ const About = () => {
   ];
 
   const stats = [
-    { number: "99.9%", label: "Uptime", icon: <Zap size={20} /> },
-    { number: "500+", label: "Happy Users", icon: <Users size={20} /> },
-    { number: "1M+", label: "Records Managed", icon: <Database size={20} /> },
-    { number: "24/7", label: "Support", icon: <Clock size={20} /> },
+    {
+      number: "100%",
+      label: "Data Accuracy",
+      icon: <Zap size={20} className="text-yellow-500" />,
+    },
+    {
+      number: "Cloud",
+      label: "Remote Access",
+      icon: <Globe size={20} className="text-yellow-300" />,
+    },
+    {
+      number: "1M+",
+      label: "Entries Managed",
+      icon: <Database size={20} className="text-emerald-500" />,
+    },
+    {
+      number: "PDF/Excel",
+      label: "Auto Reports",
+      icon: <FileText size={20} className="text-orange-500" />,
+    },
   ];
 
   const techStack = [
