@@ -132,7 +132,7 @@ const loginUser = asyncHandler(async (req, res) => {
     if (!user) {
       throw new ApiError(404, 'User not found: No account associated with this SL No.');
     }
-    if (!user.isActive) {
+    if (!user.isActive && user.role === 'vendor') {
       throw new ApiError(
         403,
         'Access Denied: Your account is currently inactive. Please contact Admin.'
