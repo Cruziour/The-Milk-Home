@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import jwt from 'jsonwebtoken';
 
 const userSchema = new mongoose.Schema(
   {
@@ -47,5 +48,19 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+userSchema.methods.generateAccessToken = function () {
+  return jwt.sign(
+    {
+      _id: this._id,
+      name: this.name,
+      role: this.role,
+    },
+    process.env.ACCESSTOKEN_SECRET_KEY,
+    {
+      expiresIn: process.env.ACCESSTOKEN_EXPIRE,
+    }
+  );
+};
 
 export const User = mongoose.model('User', userSchema);

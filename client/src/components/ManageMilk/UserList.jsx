@@ -61,7 +61,7 @@ const UserList = () => {
   }, [fetchUsers, lastFetched]);
 
   return (
-    <div className="w-full lg:w-1/4 bg-white border-r border-gray-100 flex flex-col shadow-sm">
+    <div className="w-full lg:w-1/4 bg-white border-r border-gray-100 flex flex-col shadow-sm rounded-4xl">
       {/* Header */}
       <div className="p-5 border-b border-gray-50">
         <div className="flex items-center gap-2 mb-5">
@@ -164,7 +164,9 @@ const UserCard = ({ user, isSelected, onSelect }) => (
       <span className="text-[10px] font-bold text-gray-600 uppercase pr-5">{user.milkType}</span>
     )}
     {user?.address && (
-      <span className="text-[10px] font-bold text-gray-600 uppercase truncate">{user?.address}</span>
+      <span className="text-[10px] font-bold text-gray-600 uppercase truncate">
+        {user?.address}
+      </span>
     )}
   </div>
 );

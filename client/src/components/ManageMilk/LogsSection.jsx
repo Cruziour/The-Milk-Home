@@ -24,7 +24,7 @@ import LogCard from "./LogCard";
 const LogsSection = ({ onSuccess, onError }) => {
   const dispatch = useDispatch();
 
-  // Direct useSelector - No custom hooks
+  // Direct useSelector
   const selectedUser = useSelector(selectSelectedUser);
   const allEntries = useSelector(selectAllEntries);
   const currentMonth = useSelector(selectCurrentMonth);
@@ -45,13 +45,11 @@ const LogsSection = ({ onSuccess, onError }) => {
     async (month, year, forceRefresh = false) => {
       const monthKey = `${month}-${year}`;
 
-      // Agar data pehle se hai aur refresh nahi manga, toh return kar do
       if (!forceRefresh && fetchedMonthKey === monthKey && allEntries.length > 0) {
         return;
       }
 
       try {
-        // UI state updates
         if (forceRefresh) {
           dispatch(setRefreshing(true));
         } else {
@@ -60,8 +58,6 @@ const LogsSection = ({ onSuccess, onError }) => {
         dispatch(setError(null));
 
         const response = await getAllMilkEntriesService(month, year);
-
-        // API response.data mein array hai
         dispatch(
           setAllEntries({
             entries: response.data || [],
@@ -88,7 +84,7 @@ const LogsSection = ({ onSuccess, onError }) => {
   }, [currentMonth, currentYear, fetchEntries, fetchedMonthKey]);
 
   return (
-    <div className="w-full lg:w-1/3 bg-gray-50 p-6 flex flex-col">
+    <div className="w-full lg:w-1/3 bg-gray-200 p-6 flex flex-col rounded-4xl">
       <div className="flex items-center justify-between mb-4 border-b border-gray-100 pb-4">
         <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 flex items-center gap-2">
           <History size={16} /> Logs Activity

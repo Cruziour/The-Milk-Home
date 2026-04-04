@@ -10,13 +10,13 @@ const axiosInstance = axios.create({
   timeout: 150000,
 });
 
-// Request Interceptor: Har request se pehle ye function chalega
 axiosInstance.interceptors.request.use(
   config => {
     const userData = localStorage.getItem("user");
     if (userData) {
       const user = JSON.parse(userData);
-      config.headers.Authorization = `Bearer ${user._id}`;
+      const accessToken = user.accessToken;
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
 
     return config;

@@ -132,16 +132,12 @@ const loginUser = asyncHandler(async (req, res) => {
     if (!user) {
       throw new ApiError(404, 'User not found: No account associated with this SL No.');
     }
-    if (!user.isActive && user.role === 'vendor') {
-      throw new ApiError(
-        403,
-        'Access Denied: Your account is currently inactive. Please contact Admin.'
-      );
-    }
     if (user.password !== password) {
       throw new ApiError(401, 'Invalid credentials: The password you entered is incorrect');
     }
-    const loggedInUser = user.toObject();
+    let loggedInUser = user.toObject();
+    const accessToken = await user.generateAccessToken();
+    loggedInUser = { ...loggedInUser, accessToken };
     delete loggedInUser.password;
     return res.status(200).json(new ApiResponse(200, loggedInUser, 'Success Login'));
   } catch (error) {

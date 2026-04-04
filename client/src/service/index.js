@@ -110,7 +110,7 @@ export const updateMilkEntryService = async (entryId, payload) => {
 export const exportMilkEntriesService = async (slNo, month, year, format) => {
   try {
     return await axiosInstance.get("/api/v1/milk/export", {
-      params: { slNo, month, year, format }, 
+      params: { slNo, month, year, format },
       responseType: "blob",
     });
   } catch (error) {

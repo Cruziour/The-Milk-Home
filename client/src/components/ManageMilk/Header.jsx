@@ -22,7 +22,7 @@ import {
 const Header = ({ onSuccess, onError }) => {
   const dispatch = useDispatch();
 
-  // Direct useSelector 
+  // Direct useSelector
   const isUsersRefreshing = useSelector(selectUsersRefreshing);
   const isEntriesRefreshing = useSelector(selectEntriesRefreshing);
   const currentMonth = useSelector(selectCurrentMonth);

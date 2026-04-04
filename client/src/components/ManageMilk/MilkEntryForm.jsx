@@ -69,7 +69,7 @@ const MilkEntryForm = ({ onSuccess, onError }) => {
 
     try {
       dispatch(setSaving(true));
-      const newEntry = await addMilkEntryService(payload);     
+      const newEntry = await addMilkEntryService(payload);
       dispatch(addEntryToList(newEntry));
       dispatch(updateEntryInList(newEntry?.data));
       resetForm();
@@ -82,7 +82,7 @@ const MilkEntryForm = ({ onSuccess, onError }) => {
   };
 
   return (
-    <div className="flex-1 p-8 overflow-y-auto bg-white border-r border-gray-100 hide-scrollbar min-h-screen]">
+    <div className="flex-1 rounded-4xl p-8 overflow-y-auto bg-white border-r border-gray-100 hide-scrollbar min-h-screen]">
       <div className="max-w-md mx-auto space-y-8">
         <div className="text-center space-y-2">
           <h2 className="text-3xl font-black uppercase tracking-tighter leading-none">

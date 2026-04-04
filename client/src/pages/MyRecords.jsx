@@ -1,13 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import {
-  CalendarDays,
-  Droplets,
-  CircleDollarSign,
-  ArrowRightLeft,
-  Loader2,
-  Sun,
-  Moon,
-} from "lucide-react";
+import { Droplets, CircleDollarSign, ArrowRightLeft, Loader2, Sun, Moon } from "lucide-react";
 import { getAllMilkEntriesBySlNoService } from "../service/index.js";
 import useToast from "../hooks/useToast";
 import { useSelector } from "react-redux";
@@ -88,9 +80,6 @@ const MyRecords = () => {
             <p className="text-xs opacity-80 font-medium">
               ID: {user?.slNo} • {user?.milkType}
             </p>
-          </div>
-          <div className="bg-white/20 p-3 rounded-2xl backdrop-blur-md">
-            <CalendarDays size={24} />
           </div>
         </div>
 

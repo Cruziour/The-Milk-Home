@@ -64,7 +64,6 @@ const LogCard = ({ log, onUpdateSuccess, onUpdateError }) => {
     setTempData(prev => ({ ...prev, [field]: value }));
   };
 
-  // Calculate totals
   const displayData = isEditing
     ? tempData
     : {
@@ -110,7 +109,7 @@ const LogCard = ({ log, onUpdateSuccess, onUpdateError }) => {
             onClick={startEditing}
             className="p-2.5 bg-gray-50 rounded-xl text-gray-400 hover:bg-indigo-600 hover:text-white transition-all"
           >
-            <Edit2 size={12} />
+            <Edit2 size={16} className="text-blue-950" />
           </button>
         )}
       </div>

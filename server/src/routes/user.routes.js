@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import isAdmin from '../middlewares/admin.middleware.js';
+import verifyJwt from '../middlewares/auth.middleware.js';
 import {
   loginUser,
   registerVendor,
@@ -14,9 +15,9 @@ const router = Router();
 router.route('/login').post(loginUser);
 
 // Secure routes
-router.route('/').post(isAdmin, registerVendor);
-router.route('/update/:id').put(isAdmin, updateUserStatus);
-router.route('/get-all-users').get(isAdmin, getAllUsers);
-router.route('/get-user/:slNo').get(isAdmin, getUserBySlNoAndName);
+router.route('/').post(verifyJwt, isAdmin, registerVendor);
+router.route('/update/:id').put(verifyJwt, isAdmin, updateUserStatus);
+router.route('/get-all-users').get(verifyJwt, isAdmin, getAllUsers);
+router.route('/get-user/:slNo').get(verifyJwt, isAdmin, getUserBySlNoAndName);
 
 export default router;

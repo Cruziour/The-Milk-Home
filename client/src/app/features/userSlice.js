@@ -81,7 +81,6 @@ export const {
   resetUsersState,
 } = userSlice.actions;
 
-
 // BASE SELECTORS
 export const selectAllUsers = state => state.users.allUsers || [];
 export const selectSelectedUser = state => state.users.selectedUser;
@@ -90,7 +89,6 @@ export const selectUsersLoading = state => state.users.isLoading;
 export const selectUsersRefreshing = state => state.users.isRefreshing;
 export const selectUsersError = state => state.users.error;
 export const selectUsersLastFetched = state => state.users.lastFetched;
-
 
 // MEMOIZED SELECTORS
 export const selectFilteredUsers = createSelector(
