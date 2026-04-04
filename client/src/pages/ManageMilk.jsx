@@ -35,24 +35,24 @@ const ManageMilk = () => {
 
   return (
     <>
-      {/* Toast Notification */}
       {toast && <Toast message={toast.message} type={toast.type} onClose={hideToast} />}
 
       {/* Global Styles */}
       <GlobalStyles />
 
       {/* Main Layout */}
-      <div className="flex flex-col h-screen bg-[#F8FAFC] overflow-hidden font-sans">
-        {/* Top Header with Refresh */}
+      <div className="flex flex-col h-screen bg-[#F8FAFC] md:overflow-hidden overscroll-y-auto font-sans">
         <Header onRefreshSuccess={handleSuccess} onRefreshError={handleError} />
 
         {/* Content Area */}
-        <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">
+        <div className="flex flex-col lg:flex-row flex-1 md:overflow-hidden overflow-y-auto min-h-screen">
           {/* Section 1: User List */}
           <UserList />
 
           {/* Section 2: Entry Form */}
-          <MilkEntryForm onSuccess={handleSuccess} onError={handleError} />
+          <div>
+            <MilkEntryForm onSuccess={handleSuccess} onError={handleError} />
+          </div>
 
           {/* Section 3: Logs */}
           <LogsSection onSuccess={handleSuccess} onError={handleError} />
