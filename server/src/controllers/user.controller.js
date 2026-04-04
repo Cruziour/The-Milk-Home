@@ -55,7 +55,7 @@ const registerVendor = asyncHandler(async (req, res) => {
 
 const updateUserStatus = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { slNo, name, isActive, address, phone, milkType } = req.body;
+  const { slNo, name, isActive, address, phone, milkType, password } = req.body;
 
   if (!id) throw new ApiError(400, 'User ID is required.');
 
@@ -99,6 +99,7 @@ const updateUserStatus = asyncHandler(async (req, res) => {
   if (address) user.address = address;
   if (phone) user.phone = phone;
   if (milkType) user.milkType = milkType;
+  if (password) user.password = password;
 
   await user.save();
 
@@ -172,7 +173,7 @@ const getUserBySlNoAndName = asyncHandler(async (req, res) => {
     query = { name: { $regex: slNo, $options: 'i' } };
   }
   try {
-    const user = await User.find(query).select('-password');
+    const user = await User.find(query);
     if (!user) {
       throw new ApiError(404, 'User not found: No account associated with this SL No or Name.');
     }

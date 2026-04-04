@@ -14,6 +14,7 @@ import {
   Phone,
   Droplets,
   PencilLine,
+  ShieldCheck,
 } from "lucide-react";
 import { getUserBySlNoAndNameService, updateVendorService } from "../service/index.js";
 import useToast from "../hooks/useToast.js";
@@ -35,6 +36,7 @@ const VendorUpdate = () => {
     address: "",
     milkType: "cow",
     isActive: true,
+    password: "",
   });
 
   const handleChange = e => {
@@ -62,6 +64,7 @@ const VendorUpdate = () => {
       address: user.address || "",
       milkType: user.milkType || "cow",
       isActive: user.isActive ?? true,
+      password: user.password || "",
     });
     setSelectedVendor(user);
     setVendorList([]);
@@ -207,7 +210,7 @@ const VendorUpdate = () => {
                       {selectedVendor.name}
                     </h3>
                     <p className="text-[9px] font-bold text-gray-400 tracking-tighter">
-                      ID: {selectedVendor._id}
+                      ID: {selectedVendor?._id}
                     </p>
                   </div>
                 </div>
@@ -252,7 +255,7 @@ const VendorUpdate = () => {
                       type="number"
                       required
                       className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-xl font-bold text-gray-700 outline-none focus:border-indigo-500 focus:bg-white transition-all"
-                      value={formData.slNo}
+                      value={formData?.slNo}
                       onChange={handleChange}
                     />
                   </div>
@@ -266,7 +269,7 @@ const VendorUpdate = () => {
                     name="name"
                     required
                     className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-xl font-bold text-gray-700 outline-none focus:border-indigo-500 focus:bg-white transition-all"
-                    value={formData.name}
+                    value={formData?.name}
                     onChange={handleChange}
                   />
                 </div>
@@ -279,7 +282,20 @@ const VendorUpdate = () => {
                     name="phone"
                     required
                     className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-xl font-bold text-gray-700 outline-none focus:border-indigo-500 focus:bg-white transition-all"
-                    value={formData.phone}
+                    value={formData?.phone}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 flex items-center gap-1.5">
+                    <ShieldCheck size={12} className="text-indigo-500" /> Password
+                  </label>
+                  <input
+                    name="password"
+                    required
+                    className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-xl font-bold text-gray-700 outline-none focus:border-indigo-500 focus:bg-white transition-all"
+                    value={formData?.password}
                     onChange={handleChange}
                   />
                 </div>
@@ -291,7 +307,7 @@ const VendorUpdate = () => {
                   <select
                     name="milkType"
                     className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-xl font-bold text-gray-700 outline-none focus:border-indigo-500 focus:bg-white transition-all cursor-pointer"
-                    value={formData.milkType}
+                    value={formData?.milkType}
                     onChange={handleChange}
                   >
                     <option value="cow">🐄 Cow Milk</option>
@@ -308,7 +324,7 @@ const VendorUpdate = () => {
                   name="address"
                   rows="3"
                   className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-xl font-bold text-gray-700 outline-none focus:border-indigo-500 focus:bg-white transition-all resize-none"
-                  value={formData.address}
+                  value={formData?.address}
                   onChange={handleChange}
                 />
               </div>
