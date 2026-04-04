@@ -263,7 +263,6 @@ const getMilkEntriesBySlNo = asyncHandler(async (req, res) => {
 
 const exportMilkEntries = asyncHandler(async (req, res) => {
   const { slNo, month, year, format } = req.query;
-  console.log(req.params);
 
   if (!month || !year || !format) {
     throw new ApiError(400, 'Month, Year, and Format query parameters are required');
