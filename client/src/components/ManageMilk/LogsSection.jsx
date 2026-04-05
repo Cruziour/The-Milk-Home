@@ -85,7 +85,7 @@ const LogsSection = ({ onSuccess, onError }) => {
 
   return (
     <div className="w-full lg:w-1/3 bg-gray-200 p-6 flex flex-col rounded-4xl">
-      <div className="flex items-center justify-between mb-4 border-b border-gray-100 pb-4">
+      <div className="flex items-center justify-between mb-4 border-b border-gray-100">
         <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 flex items-center gap-2">
           <History size={16} /> Logs Activity
         </h2>
@@ -123,7 +123,7 @@ const LogsSection = ({ onSuccess, onError }) => {
 
       {totalSummary && <MonthlySummary summary={totalSummary} />}
 
-      <div className="flex-1 overflow-y-auto space-y-5 pr-2 hide-scrollbar">
+      <div className="flex-1 overflow-y-auto space-y-5 pr-2 hide-scrollbar md:mb-20 lg:mb-20">
         {isLoading ? (
           <SectionLoader />
         ) : userEntries.length > 0 ? (

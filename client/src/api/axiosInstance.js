@@ -26,4 +26,18 @@ axiosInstance.interceptors.request.use(
   }
 );
 
+axiosInstance.interceptors.response.use(
+  response => {
+    return response;
+  },
+  error => {
+    if (error.response && error.response.status === 406) {
+      alert("Session expired or Invalid token. Redirecting to login...");
+      localStorage.clear();
+      window.location.href = "/";
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default axiosInstance;

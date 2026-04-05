@@ -5,7 +5,7 @@ import { ApiError, asyncHandler } from '../utils/index.js';
 const verifyJwt = asyncHandler(async (req, _, next) => {
   const authHeader = req.headers.authorization || req.headers.Authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    throw new ApiError(401, 'Unauthorized');
+    throw new ApiError(406, 'Unauthorized');
   }
   const token = authHeader.split(' ')[1];
   try {
