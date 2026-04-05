@@ -296,7 +296,7 @@ const exportMilkEntries = asyncHandler(async (req, res) => {
     if (!user) {
       throw new ApiError(404, 'User not found with the provided SL No');
     }
-    matchQuery.vendor = new mongoose.Types.ObjectId(user._id);
+    matchQuery.vendor = new mongoose.Types.ObjectId(user?._id);
   }
   try {
     const entries = await MilkEntry.aggregate([
@@ -379,9 +379,9 @@ const exportMilkEntries = asyncHandler(async (req, res) => {
         { header: 'SL', key: 'slNo', width: 8 },
         { header: 'Name', key: 'name', width: 20 },
         { header: 'Type', key: 'type', width: 10 },
-        { header: 'Morning.Qty', key: 'mQty', width: 18 },
+        { header: 'Morning.Litre', key: 'mQty', width: 18 },
         { header: 'Morning.Amt', key: 'mAmt', width: 18 },
-        { header: 'Evening.Qty', key: 'eQty', width: 18 },
+        { header: 'Evening.Litre', key: 'eQty', width: 18 },
         { header: 'Evening.Amt', key: 'eAmt', width: 18 },
         { header: 'Total Ltr', key: 'tLtr', width: 12 },
         { header: 'Total Rs', key: 'tRs', width: 15 },
@@ -443,10 +443,12 @@ const exportMilkEntries = asyncHandler(async (req, res) => {
       await workbook.xlsx.write(res);
       return;
     } else if (format === 'pdf') {
-      const doc = new PDFDocument({ margin: 30, size: 'A4' });
+      const doc = new PDFDocument({ margin: 30, size: 'A4', bufferPages: true });
+
       res.setHeader('Content-Type', 'application/pdf');
-      res.attachment(`${fileName}.pdf`);
-      doc.pipe(res);
+      res.setHeader('Content-Disposition', `attachment; filename="${fileName}.pdf"`);
+
+      const stream = doc.pipe(res);
 
       // --- Header Section ---
       doc
@@ -457,63 +459,84 @@ const exportMilkEntries = asyncHandler(async (req, res) => {
         .fillColor('#2C3E50')
         .fontSize(10)
         .text('Village: Arniya, Dist: Vaishali (Bihar)', { align: 'center' });
-      doc
-        .fontSize(12)
-        .moveDown(0.5)
-        .text(`Monthly Statement - ${month}/${year}`, { align: 'center', underline: true });
       doc.moveDown(1);
 
-      // Farmer Info
       doc
         .fontSize(11)
         .fillColor('black')
-        .text(`Farmer Name: ${user ? user.name : 'ALL FARMERS'}`, { continued: true })
-        .text(` | SL No: ${user ? user.slNo : 'N/A'}`, { align: 'left' });
+        .text(
+          `Farmer Name: ${user ? user.name : 'ALL FARMERS'} | SL No: ${user ? user.slNo : 'N/A'}`,
+          { align: 'left' }
+        );
 
       doc.moveDown(0.5);
-      doc.path('M 30 135 L 565 135').lineWidth(1).stroke(); // Stylish Divider Line
+      doc.moveTo(30, doc.y).lineTo(565, doc.y).stroke();
       doc.moveDown(1);
 
+      // TABLE DATA (Simple Array Format - Sabse zyada stable)
       const table = {
         headers: [
           'Date',
           'SL',
           'Name',
-          'Morning Qty',
-          'Morning Amt',
-          'Evening Qty',
-          'Evening Amt',
-          'Day Total Milk',
-          'Total Amount',
+          'Morning.Litre',
+          'Morning.Amt',
+          'Evening.Litre',
+          'Evening.Amt',
+          'Total.Milk',
+          'Total.Amt',
         ],
         rows: entries.map(e => [
           e.date.toISOString().split('T')[0],
-          e.vendor.slNo,
-          e.vendor.name,
-          e.morning.qty,
-          e.morning.amount,
-          e.evening.qty,
-          e.evening.amount,
-          e.dayTotalMilk,
-          e.dayTotalAmount,
+          String(e.vendor.slNo),
+          String(e.vendor.name),
+          String(e.morning.qty),
+          String(e.morning.amount),
+          String(e.evening.qty),
+          String(e.evening.amount),
+          String(e.dayTotalMilk),
+          String(e.dayTotalAmount),
         ]),
       };
 
-      await doc.table(table, {
-        prepareHeader: () => doc.font('Helvetica-Bold').fontSize(9).fillColor('#2980B9'),
-        prepareRow: (row, i) => doc.font('Helvetica').fontSize(8).fillColor('#333333'),
+      try {
+        // Table render (Simple options)
+        await doc.table(table, {
+          prepareHeader: () => doc.font('Helvetica-Bold').fontSize(8),
+          prepareRow: () => doc.font('Helvetica').fontSize(7),
+          width: 535,
+        });
+
+        // Footer
+        doc.moveDown(1);
+        doc
+          .font('Helvetica-Bold')
+          .fontSize(9)
+          .text(`GRAND TOTAL: Ltr: ${totals.tMilk.toFixed(2)} | Rs: ${totals.tAmt.toFixed(2)}`, {
+            align: 'right',
+          });
+        doc.moveDown(2);
+        doc.fontSize(10).text('________________________', { align: 'right' });
+        doc.text('Manager Signature', { align: 'right' });
+        doc.text(`Generated on: ${new Date().toLocaleString()}`, { align: 'left' });
+
+        doc.end();
+      } catch (tableErr) {
+        if (!doc._ended) doc.end();
+      }
+
+      return new Promise((resolve, reject) => {
+        stream.on('finish', resolve);
+        stream.on('error', reject);
       });
-      // --- Footer Section ---
-      doc.moveDown(2);
-      doc.fontSize(10).fillColor('black').text('________________________', { align: 'right' });
-      doc.text('Manager Signature', { align: 'right' });
-      doc.text(`Generated on: ${new Date().toLocaleString()}`, { align: 'left' });
-      doc.end();
     } else {
       throw new ApiError(400, 'Invalid format: Supported formats are excel, and pdf');
     }
   } catch (error) {
-    throw new ApiError(500, error.message || 'Error occurred while exporting milk entries');
+    if (res.headersSent) {
+      throw new ApiError(501, 'Final Export Error (Headers already sent):');
+    }
+    throw new ApiError(500, error.message || 'Internal Server Error');
   }
 });
 
