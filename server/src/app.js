@@ -1,11 +1,11 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import helmet from 'helmet'
+import helmet from 'helmet';
 
 const app = express();
 
-app.use(helmet())
+app.use(helmet());
 
 app.use(
   cors({
@@ -22,10 +22,12 @@ app.use(express.urlencoded({ extended: true }));
 // import routes
 import userRoutes from './routes/user.routes.js';
 import milkRoutes from './routes/milk.routes.js';
+import archiveRoutes from './routes/archive.routes.js';
 
 // use routes
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/milk', milkRoutes);
+app.use('/api/v1/archive', archiveRoutes);
 
 // import error handler
 import errorHandler from './middlewares/error.middleware.js';

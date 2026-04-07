@@ -4,7 +4,7 @@ const archiveSchema = new mongoose.Schema(
   {
     month: {
       type: Number,
-      required: true, // 1 to 12
+      required: true,
       min: 1,
       max: 12,
     },
@@ -15,11 +15,15 @@ const archiveSchema = new mongoose.Schema(
     },
     totalMilkPurchased: {
       type: Number,
-      default: 0, // Sabhi farmers ka total Litres
+      default: 0,
     },
     totalBillAmount: {
-      type: Number, // Sabhi farmers ka total banne wala paisa
+      type: Number,
       default: 0,
+    },
+    archivedAt: {
+      type: Date,
+      default: Date.now,
     },
   },
   {
