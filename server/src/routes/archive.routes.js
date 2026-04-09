@@ -5,7 +5,6 @@ import {
   deleteArchiveById,
   generateArchive,
   getAllArchives,
-  searchArchives,
   updateArchive,
 } from '../controllers/archive.controller.js';
 
@@ -14,10 +13,9 @@ const router = Router();
 router.use(verifyJwt, isAdmin);
 
 router.route('/generate').post(generateArchive);
-router.route('/update').put(updateArchive);
+router.route('/update/:archiveId').put(updateArchive);
 
 router.route('/all').get(getAllArchives);
-router.route('/search').get(searchArchives);
 
 router.route('/delete/:archiveId').delete(deleteArchiveById);
 

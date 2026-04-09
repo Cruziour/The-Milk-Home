@@ -50,6 +50,16 @@ export const getAllVendorsService = async () => {
   }
 };
 
+export const deleteVendorService = async id => {
+  try {
+    const { data } = await axiosInstance.delete(`/api/v1/user/delete/${id}`);
+    return data;
+  } catch (error) {
+    console.error("deleteVendorService error:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
 // Milk related services
 export const getAllMilkEntriesBySlNoService = async (slNo, logMonth, logYear) => {
   try {
@@ -115,6 +125,58 @@ export const exportMilkEntriesService = async (slNo, month, year, format) => {
     });
   } catch (error) {
     console.error("exportMilkEntriesService error:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const deleteMilkEntriesService = async payload => {
+  try {
+    const { data } = await axiosInstance.delete("/api/v1/milk/delete", {
+      data: payload,
+    });
+    return data;
+  } catch (error) {
+    console.log(`deleteMilkEntriesService error: ${error.response?.data} || ${error.message}`);
+    throw error;
+  }
+};
+
+export const fetchArchivesService = async () => {
+  try {
+    const { data } = await axiosInstance.get("/api/v1/archive/all");
+    return data;
+  } catch (error) {
+    console.error("fetchArchivesService error:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const generateArchiveService = async payload => {
+  try {
+    const { data } = await axiosInstance.post("/api/v1/archive/generate", payload);
+    return data;
+  } catch (error) {
+    console.log(`generateArchiveService error: ${error.response?.data} || ${error.message}`);
+    throw error;
+  }
+};
+
+export const deleteArchiveService = async id => {
+  try {
+    const { data } = await axiosInstance.delete(`/api/v1/archive/delete/${id}`);
+    return data;
+  } catch (error) {
+    console.log(`deleteArchiveService error: ${error.response?.data} || ${error.message}`);
+    throw error;
+  }
+};
+
+export const handleUpdateArchiveService = async id => {
+  try {
+    const { data } = await axiosInstance.put(`/api/v1/archive/update/${id}`);
+    return data;
+  } catch (error) {
+    console.log(`handleUpdateArchiveService error: ${error.response?.data} || ${error.message}`);
     throw error;
   }
 };

@@ -47,7 +47,14 @@ const generateArchive = asyncHandler(async (req, res) => {
 });
 
 const updateArchive = asyncHandler(async (req, res) => {
-  let { month, year } = req.body;
+  const { archiveId } = req.params;
+  if (!archiveId) throw new ApiError(400, 'Arcive Id is required');
+
+  const archiveData = await Archive.findById(archiveId);
+  if (!archiveData) throw new ApiError(404, 'Archive is not found.');
+
+  let month = archiveData.month;
+  let year = archiveData.year;
   month = parseInt(month);
   year = parseInt(year);
 
@@ -88,18 +95,6 @@ const updateArchive = asyncHandler(async (req, res) => {
   return res.status(200).json(new ApiResponse(200, archive, 'Archive updated successfully'));
 });
 
-const searchArchives = asyncHandler(async (req, res) => {
-  const { month, year } = req.query;
-  const query = {};
-
-  if (month) query.month = parseInt(month);
-  if (year) query.year = parseInt(year);
-
-  const archives = await Archive.find(query).sort({ year: -1, month: -1 });
-
-  return res.status(200).json(new ApiResponse(200, archives || [], 'Archives retrieved'));
-});
-
 const deleteArchiveById = asyncHandler(async (req, res) => {
   const { archiveId } = req.params;
   if (!archiveId) throw new ApiError(400, 'Archive ID is required');
@@ -118,4 +113,4 @@ const getAllArchives = asyncHandler(async (_, res) => {
     .json(new ApiResponse(200, archives, `${archives.length} archives retrieved.`));
 });
 
-export { generateArchive, updateArchive, searchArchives, getAllArchives, deleteArchiveById };
+export { generateArchive, updateArchive, getAllArchives, deleteArchiveById };

@@ -5,6 +5,7 @@ import {
   getMilkEntriesBySlNo,
   exportMilkEntries,
   updateMilkEntry,
+  deleteMlikEntries,
 } from '../controllers/milk.controller.js';
 import isAdmin from '../middlewares/admin.middleware.js';
 import verifyJwt from '../middlewares/auth.middleware.js';
@@ -19,5 +20,6 @@ router.route('/add').post(verifyJwt, isAdmin, addMilkEntry);
 router.route('/get-entries').get(verifyJwt, isAdmin, getMilkEntries);
 router.route('/export').get(verifyJwt, isAdmin, exportMilkEntries);
 router.route('/update-entry/:entryId').put(verifyJwt, isAdmin, updateMilkEntry);
+router.route('/delete').delete(verifyJwt, isAdmin, deleteMlikEntries);
 
 export default router;

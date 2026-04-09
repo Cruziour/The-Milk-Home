@@ -540,4 +540,51 @@ const exportMilkEntries = asyncHandler(async (req, res) => {
   }
 });
 
-export { addMilkEntry, updateMilkEntry, getMilkEntries, getMilkEntriesBySlNo, exportMilkEntries };
+const deleteMlikEntries = asyncHandler(async (req, res) => {
+  const { month, year } = req.body;
+  if (!month || !year) {
+    throw new ApiError(400, 'Month and Year query parameters are required');
+  }
+
+  const parsedMonth = parseInt(month);
+  const parsedYear = parseInt(year);
+
+  if (isNaN(parsedMonth) || parsedMonth < 1 || parsedMonth > 12) {
+    throw new ApiError(400, 'Invalid month: It must be a number between 1 and 12');
+  }
+
+  if (isNaN(parsedYear) || parsedYear < 1900 || parsedYear > 2100) {
+    throw new ApiError(400, 'Invalid year');
+  }
+  
+  const startDate = new Date(parsedYear, parsedMonth - 1, 1);
+  const endDate = new Date(parsedYear, parsedMonth, 1);
+
+  const result = await MilkEntry.deleteMany({
+    date: {
+      $gte: startDate,
+      $lt: endDate,
+    },
+  });
+  if (result.deletedCount === 0) {
+    throw new ApiError(400, 'No entries found for the selected period.');
+  }
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        result.deletedCount,
+        `${result.deletedCount} milk entries deleted successfully for ${parsedMonth}/${parsedYear}`
+      )
+    );
+});
+
+export {
+  addMilkEntry,
+  updateMilkEntry,
+  getMilkEntries,
+  getMilkEntriesBySlNo,
+  exportMilkEntries,
+  deleteMlikEntries,
+};

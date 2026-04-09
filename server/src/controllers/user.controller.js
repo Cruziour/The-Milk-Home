@@ -1,4 +1,5 @@
 import { User } from '../models/user.model.js';
+import { MilkEntry } from '../models/milk_entry.model.js';
 import { ApiError, ApiResponse, asyncHandler } from '../utils/index.js';
 
 // register user
@@ -184,4 +185,39 @@ const getUserBySlNoAndName = asyncHandler(async (req, res) => {
   }
 });
 
-export { registerVendor, updateUserStatus, loginUser, getAllUsers, getUserBySlNoAndName };
+const deleteUserAndAssociatedData = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    throw new ApiError(400, 'Invalid User ID format');
+  }
+
+  const user = await User.findById(id);
+  if (!user) {
+    throw new ApiError(404, 'User not found');
+  }
+
+  const milkEntriesDeletion = await MilkEntry.deleteMany({
+    vendor: id,
+  });
+
+  await User.findByIdAndDelete(id);
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        {},
+        `User '${user.name}' and ${milkEntriesDeletion.deletedCount} associated milk records have been permanently deleted.`
+      )
+    );
+});
+
+export {
+  registerVendor,
+  updateUserStatus,
+  loginUser,
+  getAllUsers,
+  getUserBySlNoAndName,
+  deleteUserAndAssociatedData,
+};
