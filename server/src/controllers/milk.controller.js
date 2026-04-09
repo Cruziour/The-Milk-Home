@@ -556,7 +556,7 @@ const deleteMlikEntries = asyncHandler(async (req, res) => {
   if (isNaN(parsedYear) || parsedYear < 1900 || parsedYear > 2100) {
     throw new ApiError(400, 'Invalid year');
   }
-  
+
   const startDate = new Date(parsedYear, parsedMonth - 1, 1);
   const endDate = new Date(parsedYear, parsedMonth, 1);
 
