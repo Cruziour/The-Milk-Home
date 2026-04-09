@@ -259,7 +259,7 @@ const Config = () => {
           )}
         </div>
 
-        <footer className="mt-8 text-center text-sm text-gray-400">Admin Panel v2.0</footer>
+        <footer className="mt-8 text-center text-sm text-gray-400">Admin Panel v1.0</footer>
       </div>
 
       <DeleteModal
