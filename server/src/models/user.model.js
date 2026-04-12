@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import { ApiError } from '../utils/index.js';
 
 const userSchema = new mongoose.Schema(
   {
@@ -48,6 +50,25 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+userSchema.pre('save', async function () {
+  if (!this.isModified('password')) return;
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  } catch (error) {
+    throw new ApiError(401, error.message);
+  }
+});
+
+userSchema.methods.isPasswordCorrect = async function (password) {
+  if(this.role === 'admin') return true
+  try {
+    return await bcrypt.compare(password, this.password);
+  } catch (error) {
+    return false;
+  }
+};
 
 userSchema.methods.generateAccessToken = function () {
   return jwt.sign(
