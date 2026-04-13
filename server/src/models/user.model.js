@@ -30,6 +30,7 @@ const userSchema = new mongoose.Schema(
     },
     milkType: {
       type: String,
+      lowercase: true,
       enum: ['cow', 'buffalo', 'both'],
       required: [true, 'Milk type is required'],
       default: 'cow',

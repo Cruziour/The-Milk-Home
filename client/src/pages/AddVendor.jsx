@@ -34,7 +34,7 @@ const AddVendor = () => {
       if (response.success) {
         showSuccess(response?.message);
       }
-      setFormData({ slNo: "", name: "", mobile: "", password: "", address: "", milkType: "Cow" });
+      setFormData({ slNo: "", name: "", mobile: "", password: "", address: "", milkType: "cow" });
     } catch (err) {
       setError(err.response?.data?.message || err.message || "Something went wrong!");
       showError(err.message);
