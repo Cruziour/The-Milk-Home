@@ -45,7 +45,7 @@ const ManageMilk = () => {
         <Header onRefreshSuccess={handleSuccess} onRefreshError={handleError} />
 
         {/* Content Area */}
-        <div className="flex flex-col lg:flex-row lg:gap-12 mt-2 flex-1 md:overflow-hidden overflow-y-auto min-h-screen">
+        <div className="flex flex-col lg:flex-row lg:gap-12 mt-2 flex-1 md:overflow-hidden overflow-y-auto min-h-screen mb-40">
           {/* Section 1: User List */}
           <UserList />
 

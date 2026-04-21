@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FaGithub, FaLinkedin, FaEnvelope, FaWhatsapp, FaHeart } from "react-icons/fa";
 import { HiOutlineCpuChip, HiSparkles } from "react-icons/hi2";
+import { NavLink } from "react-router-dom";
 import {
   Database,
   ShieldCheck,
@@ -317,36 +318,36 @@ const About = () => {
 
                 {/* Social Links */}
                 <div className="flex gap-3 mt-6">
-                  <a
-                    href="https://github.com/your-username"
+                  <NavLink
+                    to="https://github.com/Cruziour"
                     target="_blank"
                     rel="noreferrer"
                     className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-all hover:scale-110"
                   >
                     <FaGithub size={18} />
-                  </a>
-                  <a
-                    href="https://linkedin.com/in/your-username"
+                  </NavLink>
+                  <NavLink
+                    to="https://www.linkedin.com/in/rupesh-kumar-raushan-87a5b7185/"
                     target="_blank"
                     rel="noreferrer"
                     className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-all hover:scale-110"
                   >
                     <FaLinkedin size={18} />
-                  </a>
-                  <a
-                    href="mailto:your-email@example.com"
+                  </NavLink>
+                  <NavLink
+                    to="mailto:www.rupeshkumarraushan0@gmail.com"
                     className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-all hover:scale-110"
                   >
                     <FaEnvelope size={18} />
-                  </a>
-                  <a
-                    href="https://wa.me/your-number"
+                  </NavLink>
+                  <NavLink
+                    to="https://wa.me/6204563476"
                     target="_blank"
                     rel="noreferrer"
                     className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-all hover:scale-110"
                   >
                     <FaWhatsapp size={18} />
-                  </a>
+                  </NavLink>
                 </div>
               </div>
 
@@ -379,20 +380,20 @@ const About = () => {
 
                 {/* CTA Buttons */}
                 <div className="flex flex-wrap gap-4">
-                  <a
-                    href="mailto:your-email@example.com"
+                  <NavLink
+                    to="mailto:www.rupeshkumarraushan0@gmail.com"
                     className="inline-flex items-center gap-2 bg-gray-900 hover:bg-black text-white px-6 py-3 rounded-xl text-sm font-bold transition-all hover:shadow-xl active:scale-95"
                   >
                     <FaEnvelope size={16} /> Get in Touch
-                  </a>
-                  <a
-                    href="https://github.com/your-username"
+                  </NavLink>
+                  <NavLink
+                    to="https://github.com/Cruziour"
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-800 px-6 py-3 rounded-xl text-sm font-bold transition-all"
                   >
                     <Code2 size={16} /> View Projects
-                  </a>
+                  </NavLink>
                 </div>
               </div>
             </div>

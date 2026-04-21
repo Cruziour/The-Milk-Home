@@ -104,7 +104,7 @@ const UserList = () => {
       </div>
 
       {/* User List */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 hide-scrollbar">
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 hide-scrollbar md:mb-20 sm:mb-0">
         {isLoading ? (
           <SectionLoader />
         ) : filteredUsers.length > 0 ? (
