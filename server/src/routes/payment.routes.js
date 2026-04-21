@@ -9,7 +9,7 @@ import verifyJwt from '../middlewares/auth.middleware.js';
 
 const router = Router();
 
-router.route('/get-ledger').get(getVendorLedger);
+router.route('/get-ledger').get(verifyJwt, getVendorLedger);
 router.route('/add-payment').post(verifyJwt, isAdmin, addPayment);
 router.route('/download-ledger').get(verifyJwt, isAdmin, downloadVendorLedger);
 

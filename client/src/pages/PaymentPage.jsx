@@ -250,11 +250,17 @@ const PaymentPage = () => {
                       size={24}
                     />
                     <input
-                      type="number"
+                      type="text"
                       value={amount}
-                      onChange={e => setAmount(e.target.value)}
+                      onChange={e => {
+                        const val = e.target.value;
+                        if (val === "" || /^[0-9]*$/.test(val)) {
+                          setAmount(val);
+                        }
+                      }}
                       className="w-full pl-16 pr-6 py-6 bg-slate-50 border-none rounded-4xl text-4xl font-black text-slate-800 outline-none focus:ring-4 ring-indigo-50"
                       placeholder="0"
+                      inputMode="numeric" // Mobile par number keyboard open karne ke liye
                     />
                   </div>
                 </div>
