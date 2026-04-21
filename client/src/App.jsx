@@ -17,6 +17,8 @@ import {
   Reports,
   Login,
   MyRecords,
+  PaymentPage,
+  PaymentHistory,
 } from "./pages/index.js";
 import ProtectedRoute from "./utils/ProtectedRoute.jsx";
 
@@ -36,9 +38,11 @@ const App = () => {
           <Route path="/updatevendor" element={<VendorUpdate />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/config" element={<Config />} />
+          <Route path="/payment" element={<PaymentPage />} />
         </Route>
         <Route element={<ProtectedRoute allowedRoles={["vendor"]} />}>
           <Route path="/myrecords" element={<MyRecords />} />
+          <Route path="/payment-history" element={<PaymentHistory />} />
         </Route>
       </Route>
     )

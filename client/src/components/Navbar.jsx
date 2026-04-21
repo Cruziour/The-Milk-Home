@@ -19,13 +19,17 @@ const Navbar = () => {
 
   const adminItems = [
     { name: "Manage Milk", to: "/managemilk" },
+    { name: "Payment", to: "/payment" },
     { name: "Add Vendor", to: "/addvendor" },
     { name: "Update Vendor", to: "/updatevendor" },
     { name: "Report", to: "/reports" },
     { name: "Config", to: "/config" },
   ];
 
-  const vendorItems = [{ name: "My Records", to: "/myrecords" }];
+  const vendorItems = [
+    { name: "My Records", to: "/myrecords" },
+    { name: "Payment History", to: "/payment-history" },
+  ];
 
   const menuItems =
     role === "admin" ? [...commonItems, ...adminItems] : [...commonItems, ...vendorItems];

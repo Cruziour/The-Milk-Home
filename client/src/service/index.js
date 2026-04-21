@@ -180,3 +180,43 @@ export const handleUpdateArchiveService = async id => {
     throw error;
   }
 };
+
+// Payment & Ledger related services
+export const addPaymentService = async payload => {
+  try {
+    const { data } = await axiosInstance.post("/api/v1/payment/add-payment", payload, {
+      withCredentials: true,
+    });
+    return data;
+  } catch (error) {
+    console.error("addPaymentService error:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const getVendorLedgerService = async (slNo, month, year) => {
+  try {
+    const { data } = await axiosInstance.get("/api/v1/payment/get-ledger", {
+      params: { slNo, month, year },
+      withCredentials: true,
+    });
+    return data;
+  } catch (error) {
+    console.error("getVendorLedgerService error:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const downloadVendorLedgerService = async (slNo, month, year) => {
+  try {
+    const { data } = await axiosInstance.get("/api/v1/payment/download-ledger", {
+      params: { slNo, month, year },
+      responseType: "blob",
+      withCredentials: true,
+    });
+    return data;
+  } catch (error) {
+    console.error("downloadVendorLedgerService error:", error);
+    throw error;
+  }
+};

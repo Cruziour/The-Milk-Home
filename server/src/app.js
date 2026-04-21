@@ -23,11 +23,13 @@ app.use(express.urlencoded({ extended: true }));
 import userRoutes from './routes/user.routes.js';
 import milkRoutes from './routes/milk.routes.js';
 import archiveRoutes from './routes/archive.routes.js';
+import paymentRoutes from './routes/payment.routes.js';
 
 // use routes
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/milk', milkRoutes);
 app.use('/api/v1/archive', archiveRoutes);
+app.use('/api/v1/payment', paymentRoutes);
 
 // import error handler
 import errorHandler from './middlewares/error.middleware.js';

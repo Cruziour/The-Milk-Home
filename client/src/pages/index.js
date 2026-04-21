@@ -8,3 +8,5 @@ export { default as VendorUpdate } from "./VendorUpdate.jsx";
 export { default as Reports } from "./Report.jsx";
 export { default as Config } from "./Config.jsx";
 export { default as MyRecords } from "./MyRecords.jsx";
+export { default as PaymentPage } from "./PaymentPage.jsx";
+export { default as PaymentHistory } from "./PaymentHistory.jsx";
